@@ -1,8 +1,14 @@
 @import "tailwindcss";
 
+/* Kunci ke MODE TERANG: varian `dark:` hanya aktif jika ada class `.dark` di
+   atasnya (yang sengaja tidak pernah dipasang). Tanpa ini, Tailwind v4 otomatis
+   memakai prefers-color-scheme OS, sehingga tampilan jadi tak konsisten.
+   Dark mode bisa diaktifkan lagi nanti dengan toggle yang menambah class .dark. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fcfbf9; /* putih hangat (cream tipis) — lebih premium dari putih murni */
+  --foreground: #1c1917; /* stone-900 */
 }
 
 @theme inline {
@@ -10,17 +16,33 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Warna brand (caramel hangat) — aksen utama seluruh aplikasi.
+     Dipakai sebagai bg-brand-600, text-brand-600, ring-brand-500, dst. */
+  --color-brand-50: #fbf5ec;
+  --color-brand-100: #f5e6cf;
+  --color-brand-200: #ecca9c;
+  --color-brand-300: #e0a967;
+  --color-brand-400: #d68c3d;
+  --color-brand-500: #c0721f;
+  --color-brand-600: #a25c18;
+  --color-brand-700: #824817;
+  --color-brand-800: #6a3b18;
+  --color-brand-900: #583218;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: var(--color-brand-200);
+  color: var(--color-brand-900);
 }
