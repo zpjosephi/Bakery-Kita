@@ -104,6 +104,12 @@ export default function AccountMenu() {
           Dashboard
         </Link>
       )}
+      <Link
+        href="/pesanan"
+        className="hidden rounded-lg px-2.5 py-1.5 text-sm font-medium text-stone-600 outline-none transition hover:text-stone-900 focus-visible:ring-2 focus-visible:ring-brand-500 sm:inline dark:text-stone-300 dark:hover:text-stone-50"
+      >
+        Pesanan saya
+      </Link>
       <span className="hidden text-sm text-stone-600 sm:inline dark:text-stone-300">
         Halo, <span className="font-medium">{firstName}</span>
       </span>
