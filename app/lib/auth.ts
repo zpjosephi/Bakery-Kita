@@ -10,6 +10,7 @@ export type CurrentUser = {
   role: Role;
 };
 
+// CURRENT LOGGED-IN USER (+ role)
 export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
   const supabase = await createClient();
   const {
@@ -34,6 +35,7 @@ export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
   };
 });
 
+// CHECK IF ADMIN
 export const isAdmin = cache(async (): Promise<boolean> => {
   const user = await getCurrentUser();
   return user?.role === "admin";

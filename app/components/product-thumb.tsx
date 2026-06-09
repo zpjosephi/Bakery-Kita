@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+// product image — local file, remote URL, or emoji fallback
 export default function ProductThumb({
   image,
   emoji,

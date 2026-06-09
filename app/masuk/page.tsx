@@ -6,8 +6,9 @@ import { getCurrentUser } from "../lib/auth";
 
 export const metadata = { title: "Masuk — Bakery Kita" };
 
+// LOGIN PAGE
 export default async function LoginPage() {
-  // Sudah login? Tidak perlu lihat halaman ini.
+  // already logged in? skip this page
   if (await getCurrentUser()) redirect("/");
 
   return (

@@ -9,6 +9,7 @@ import SiteHeader from "../components/site-header";
 import Steps from "../components/steps";
 import { buttonClass } from "../components/ui";
 
+// CART PAGE
 export default function CartPage() {
   const { items, totalItems, totalPrice, setQty, remove, clear, hydrated } =
     useCart();

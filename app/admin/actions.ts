@@ -19,6 +19,7 @@ function slugify(s: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
+// CREATE / EDIT PRODUCT
 export async function saveProduct(
   _prev: AdminState,
   formData: FormData,
@@ -73,6 +74,7 @@ export async function saveProduct(
   return { ok: id ? "Perubahan tersimpan." : `Produk "${name}" ditambahkan.` };
 }
 
+// DELETE PRODUCT
 export async function deleteProduct(formData: FormData): Promise<void> {
   if (!(await isAdmin())) return;
   const id = String(formData.get("id") ?? "").trim();
@@ -85,6 +87,7 @@ export async function deleteProduct(formData: FormData): Promise<void> {
   revalidatePath("/");
 }
 
+// UPDATE ORDER STATUS (processing / done)
 export async function setFulfillment(formData: FormData): Promise<void> {
   if (!(await isAdmin())) return;
   const orderId = String(formData.get("orderId") ?? "").trim();

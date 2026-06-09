@@ -8,6 +8,7 @@ import { buttonClass } from "./ui";
 
 type Account = { name: string; role: "customer" | "admin" };
 
+// header account area — login/signup links, or greeting + logout
 export default function AccountMenu() {
   const router = useRouter();
   const [account, setAccount] = useState<Account | null>(null);

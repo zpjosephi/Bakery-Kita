@@ -1,3 +1,4 @@
+// global footer + "made by" watermark
 export default function SiteFooter() {
   return (
     <footer className="mt-auto border-t border-stone-200/70 py-8 dark:border-stone-800">

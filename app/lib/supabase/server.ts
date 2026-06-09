@@ -18,7 +18,7 @@ export async function createClient() {
               cookieStore.set(name, value, options),
             );
           } catch {
-            // Server Component tidak boleh menulis cookie; ditangani di proxy.
+            // Server Components can't set cookies; handled by proxy
           }
         },
       },

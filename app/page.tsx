@@ -4,6 +4,7 @@ import ProductCartControl from "./components/product-cart-control";
 import ProductThumb from "./components/product-thumb";
 import SiteHeader from "./components/site-header";
 
+// CATALOG (home page)
 export default async function CatalogPage() {
   const products = await getProducts();
 

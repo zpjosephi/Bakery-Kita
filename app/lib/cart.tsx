@@ -30,6 +30,7 @@ type CartContextValue = {
 const CartContext = createContext<CartContextValue | null>(null);
 const STORAGE_KEY = "bakery-cart-v1";
 
+// cart state, persisted to localStorage
 export function CartProvider({ children }: { children: ReactNode }) {
   const { byId } = useProducts();
   const [lines, setLines] = useState<CartLine[]>([]);

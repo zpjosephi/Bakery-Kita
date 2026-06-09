@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
-// Service role key — menembus RLS, hanya untuk kode server.
+// service role key — bypasses RLS, server-only
 export function createAdminClient() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
