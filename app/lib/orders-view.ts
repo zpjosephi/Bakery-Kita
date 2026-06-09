@@ -2,18 +2,13 @@ import { cache } from "react";
 import { createClient } from "./supabase/server";
 import type { OrderStatus, OrderItem } from "./orders";
 
-// Pembacaan pesanan untuk DITAMPILKAN (riwayat pelanggan & panel admin).
-// Beda dengan orders.ts (yang pakai service_role untuk alur bayar): di sini
-// kita pakai klien server ber-sesi, jadi RLS yang menentukan siapa lihat apa
-// (pelanggan → pesanannya sendiri; admin → semua).
-
 export type OrderFulfillment = "diproses" | "selesai";
 
 export type OrderView = {
   orderId: string;
   amount: number;
-  status: OrderStatus; // status pembayaran
-  fulfillment: OrderFulfillment; // status pemenuhan (setelah lunas)
+  status: OrderStatus;
+  fulfillment: OrderFulfillment;
   customer?: { nama: string; hp: string; alamat: string };
   items: OrderItem[];
   createdAt: string;
@@ -41,7 +36,6 @@ function toView(r: Row): OrderView {
   };
 }
 
-// Pesanan milik pelanggan yang sedang login (newest first).
 export const getMyOrders = cache(async (): Promise<OrderView[]> => {
   const supabase = await createClient();
   const {
@@ -58,7 +52,6 @@ export const getMyOrders = cache(async (): Promise<OrderView[]> => {
   return (data ?? []).map((r) => toView(r as Row));
 });
 
-// Semua pesanan (khusus admin; RLS orders_select_admin yang mengizinkan).
 export const getAllOrders = cache(async (): Promise<OrderView[]> => {
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -69,7 +62,6 @@ export const getAllOrders = cache(async (): Promise<OrderView[]> => {
   return (data ?? []).map((r) => toView(r as Row));
 });
 
-// Label + warna badge status gabungan (pembayaran + pemenuhan).
 export function statusBadge(o: Pick<OrderView, "status" | "fulfillment">): {
   label: string;
   cls: string;
@@ -84,7 +76,6 @@ export function statusBadge(o: Pick<OrderView, "status" | "fulfillment">): {
   if (o.status === "PENDING") return { label: "Menunggu pembayaran", cls: tone.amber };
   if (o.status === "GAGAL") return { label: "Pembayaran gagal", cls: tone.red };
   if (o.status === "KEDALUWARSA") return { label: "Kedaluwarsa", cls: tone.gray };
-  // LUNAS:
   if (o.fulfillment === "selesai") return { label: "Selesai", cls: tone.green };
   return { label: "Sedang diproses", cls: tone.blue };
 }

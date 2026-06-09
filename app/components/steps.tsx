@@ -1,7 +1,3 @@
-// Indikator langkah proses pemesanan.
-// Mendukung Golden Rule #4 (kejelasan tahap awal–tengah–akhir) dan #8 (kurangi
-// beban ingatan: pembeli selalu tahu posisinya dalam alur).
-
 const STEPS = ["Keranjang", "Data Diri", "Pembayaran", "Selesai"];
 
 export default function Steps({ current }: { current: number }) {

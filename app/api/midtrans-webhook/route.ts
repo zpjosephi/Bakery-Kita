@@ -2,15 +2,6 @@ import { NextResponse } from "next/server";
 import { verifySignature, mapStatus } from "../../lib/midtrans";
 import { getOrder, setOrderStatus } from "../../lib/orders";
 
-// Fase 3 — POST /api/midtrans-webhook
-// Midtrans "menelepon" endpoint ini setiap status pembayaran berubah.
-//
-// ⚠️ Di localhost, webhook dari internet TIDAK bisa mampir ke laptop. Untuk uji
-// lokal, halaman bayar memakai polling via /api/order-status. Webhook ini baru
-// benar-benar terpakai saat aplikasi sudah online (mis. Vercel) dan URL-nya
-// didaftarkan di dashboard Midtrans (Settings → Configuration → Notification URL).
-// Atau pakai ngrok untuk mengeteskannya dari localhost.
-
 type Notification = {
   order_id?: string;
   status_code?: string;

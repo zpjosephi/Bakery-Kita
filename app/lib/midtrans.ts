@@ -2,19 +2,13 @@ import "server-only";
 import { createHash } from "crypto";
 import type { OrderStatus } from "./orders";
 
-// Fase 3 — "Jembatan" ke Midtrans (Core API). Semua di sini berjalan di SERVER
-// supaya Server Key tidak pernah bocor ke browser.
-
 const SERVER_KEY = process.env.MIDTRANS_SERVER_KEY ?? "";
 const IS_PRODUCTION = process.env.MIDTRANS_IS_PRODUCTION === "true";
 
-// Inilah yang menentukan uang asli vs palsu: selama base URL = sandbox,
-// tidak ada uang sungguhan yang bergerak.
 const BASE_URL = IS_PRODUCTION
   ? "https://api.midtrans.com"
   : "https://api.sandbox.midtrans.com";
 
-// Midtrans memakai HTTP Basic Auth: username = Server Key, password = kosong.
 function authHeader(): string {
   const token = Buffer.from(`${SERVER_KEY}:`).toString("base64");
   return `Basic ${token}`;
@@ -22,14 +16,13 @@ function authHeader(): string {
 
 export type ChargeResult = {
   qrString: string;
-  qrImageUrl?: string; // URL gambar QR — dipakai QRIS Simulator sandbox
+  qrImageUrl?: string;
   expiryTime?: string;
   transactionId: string;
 };
 
 type MidtransAction = { name: string; url: string };
 
-// Minta QRIS dinamis ke Midtrans untuk satu pesanan.
 export async function chargeQris(
   orderId: string,
   amount: number,
@@ -55,8 +48,6 @@ export async function chargeQris(
     );
   }
 
-  // actions[] berisi beberapa URL; "generate-qr-code" adalah URL gambar QR
-  // yang ditempel ke QRIS Simulator sandbox.
   const actions: MidtransAction[] = Array.isArray(data.actions) ? data.actions : [];
   const qrImageUrl = actions.find((a) => a.name === "generate-qr-code")?.url;
 
@@ -68,9 +59,6 @@ export async function chargeQris(
   };
 }
 
-// Tanya status terkini sebuah transaksi langsung ke Midtrans.
-// Berguna saat di localhost (webhook dari internet tidak bisa mampir ke laptop),
-// jadi frontend bisa "polling" status lewat endpoint ini.
 export async function fetchTransactionStatus(orderId: string): Promise<{
   transactionStatus: string;
   fraudStatus?: string;
@@ -87,8 +75,7 @@ export async function fetchTransactionStatus(orderId: string): Promise<{
   };
 }
 
-// Verifikasi tanda tangan webhook (anti webhook palsu).
-// Rumus Midtrans: SHA512(order_id + status_code + gross_amount + ServerKey).
+// SHA512(order_id + status_code + gross_amount + server_key)
 export function verifySignature(input: {
   orderId: string;
   statusCode: string;
@@ -101,14 +88,12 @@ export function verifySignature(input: {
   return expected === input.signatureKey;
 }
 
-// Terjemahkan status Midtrans → status pesanan kita.
 export function mapStatus(
   transactionStatus: string,
   fraudStatus?: string,
 ): OrderStatus {
   switch (transactionStatus) {
     case "capture":
-      // Untuk kartu: "capture" + fraud "accept" = sukses. QRIS umumnya "settlement".
       return fraudStatus === "challenge" ? "PENDING" : "LUNAS";
     case "settlement":
       return "LUNAS";

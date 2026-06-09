@@ -1,9 +1,5 @@
 "use client";
 
-// Halaman Bayar QRIS (modern minimalis, palet stone + caramel).
-// Menampilkan gambar QR (dari qr_string) dan polling status ke /api/order-status
-// sampai LUNAS / kedaluwarsa.
-
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
@@ -23,8 +19,6 @@ type StatusResponse = {
   expiryTime?: string;
 };
 
-// Simulator QRIS sandbox versi baru (akun dibuat setelah 4 Nov 2024).
-// Kolomnya "QR Code Image Url" → diisi URL gambar QR (bukan teks qr_string).
 const SIMULATOR_URL = "https://simulator.sandbox.midtrans.com/v2/qris/index";
 
 export default function PayPage() {
@@ -34,7 +28,6 @@ export default function PayPage() {
   const [error, setError] = useState<string>("");
   const [copied, setCopied] = useState(false);
 
-  // Polling status: cek sekarang, lalu ulang tiap 3 detik selama masih PENDING.
   useEffect(() => {
     if (!orderId) return;
     let active = true;
@@ -67,7 +60,6 @@ export default function PayPage() {
     };
   }, [orderId]);
 
-  // Render qr_string jadi gambar QR (PNG data URL) saat order pertama didapat.
   useEffect(() => {
     if (!order?.qrString) return;
     QRCode.toDataURL(order.qrString, { width: 280, margin: 2 })
@@ -133,7 +125,6 @@ export default function PayPage() {
               Menunggu pembayaran…
             </div>
 
-            {/* Sandbox: "scan"-nya pakai simulator yang meminta URL gambar QR. */}
             <div className="mt-5 rounded-xl bg-stone-50 p-4 text-left text-sm dark:bg-stone-800/50">
               <p className="font-semibold text-stone-900 dark:text-stone-100">
                 🧪 Cara bayar (sandbox, uang palsu):

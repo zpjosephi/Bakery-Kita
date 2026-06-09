@@ -1,9 +1,5 @@
 "use client";
 
-// Toast feedback (Golden Rule #3: informative feedback).
-// Muncul sebentar tiap produk ditambahkan ke keranjang, lalu hilang sendiri.
-// aria-live="polite" → pembaca layar ikut mengumumkan, mendukung aksesibilitas.
-
 import { useEffect, useState } from "react";
 import { useCart } from "../lib/cart";
 

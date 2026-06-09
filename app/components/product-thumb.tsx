@@ -1,10 +1,5 @@
 import Image from "next/image";
 
-// Thumbnail produk yang tahan banting: kalau ada foto lokal (path diawali "/")
-// pakai next/image (teroptimasi); kalau kosong / bukan path lokal, tampilkan
-// kotak emoji sebagai gantinya. Komponen presentasional (tanpa hook) → boleh
-// dipakai di Server maupun Client Component. Harus diletakkan di dalam wadah
-// ber-`position: relative` (karena memakai `fill`).
 export default function ProductThumb({
   image,
   emoji,
@@ -22,7 +17,6 @@ export default function ProductThumb({
   className?: string;
   emojiClassName?: string;
 }) {
-  // Foto lokal (path diawali "/") → next/image (teroptimasi).
   if (image && image.startsWith("/")) {
     return (
       <Image
@@ -36,8 +30,6 @@ export default function ProductThumb({
     );
   }
 
-  // URL eksternal (mis. hasil upload ke Supabase Storage) → <img> biasa, supaya
-  // bekerja dengan domain apa pun tanpa perlu daftar remotePatterns di config.
   if (image && /^https?:\/\//i.test(image)) {
     return (
       // eslint-disable-next-line @next/next/no-img-element

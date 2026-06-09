@@ -1,8 +1,5 @@
 "use client";
 
-// Ikon keranjang + jumlah item, tampil di pojok header.
-// Klik → pindah ke halaman /keranjang. Client Component karena membaca state keranjang.
-
 import Link from "next/link";
 import { useCart } from "../lib/cart";
 
@@ -17,8 +14,6 @@ export default function CartBadge() {
     >
       <span className="text-base leading-none">🛒</span>
       <span className="hidden sm:inline">Keranjang</span>
-      {/* hydrated: badge angka baru muncul setelah isi keranjang dibaca dari
-          localStorage, supaya tidak terjadi hydration mismatch saat render awal. */}
       {hydrated && totalItems > 0 && (
         <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-600 px-1 text-xs font-bold text-white">
           {totalItems}

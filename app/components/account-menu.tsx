@@ -1,10 +1,5 @@
 "use client";
 
-// Bagian kanan header: status login. Karena SiteHeader ikut dipakai di dalam
-// Client Component (keranjang/checkout/bayar), bagian auth ini sengaja client
-// dan membaca sesi lewat browser client + onAuthStateChange (reaktif saat
-// login/logout). Admin mendapat pintasan ke Dashboard.
-
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -22,8 +17,6 @@ export default function AccountMenu() {
     const supabase = createClient();
     let active = true;
 
-    // onAuthStateChange langsung memancarkan INITIAL_SESSION saat mount,
-    // jadi ini sekaligus menangani pemuatan awal.
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       const u = session?.user ?? null;
       if (!u) {
@@ -36,13 +29,11 @@ export default function AccountMenu() {
 
       const fallbackName =
         (u.user_metadata?.full_name as string | undefined) ?? u.email ?? "";
-      // Tampilkan dulu dari sesi (tanpa await di dalam callback → hindari deadlock).
       if (active) {
         setAccount({ name: fallbackName, role: "customer" });
         setReady(true);
       }
 
-      // Ambil role dari profiles secara terpisah & ditunda.
       setTimeout(async () => {
         const { data: profile } = await supabase
           .from("profiles")

@@ -2,9 +2,6 @@ import Link from "next/link";
 import CartBadge from "./cart-badge";
 import AccountMenu from "./account-menu";
 
-// Header konsisten di semua halaman (Golden Rule #1): brand di kiri, link kembali
-// opsional, badge keranjang di kanan. Sticky + blur, gaya minimalis hangat.
-
 export default function SiteHeader({
   back,
 }: {

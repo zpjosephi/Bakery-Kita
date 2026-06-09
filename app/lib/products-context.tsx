@@ -1,10 +1,5 @@
 "use client";
 
-// Jembatan data produk dari server ke Client Component.
-// Produk diambil sekali di server (lihat layout.tsx) lalu dimasukkan ke context
-// ini, sehingga komponen client (mis. keranjang) bisa cari produk by id
-// secara SINKRON tanpa harus query DB sendiri.
-
 import { createContext, useContext, useMemo, type ReactNode } from "react";
 import type { Product } from "./products";
 
@@ -36,8 +31,6 @@ export function ProductsProvider({
 
 export function useProducts() {
   const ctx = useContext(ProductsContext);
-  if (!ctx) {
-    throw new Error("useProducts harus dipakai di dalam <ProductsProvider>");
-  }
+  if (!ctx) throw new Error("useProducts harus dipakai di dalam ProductsProvider");
   return ctx;
 }

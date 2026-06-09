@@ -1,9 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
-// Klien Supabase untuk dipakai di SERVER (Server Component & Route Handler).
-// Membaca sesi login dari cookie, jadi setiap query tunduk pada RLS sebagai
-// user yang sedang login (atau anonim kalau belum login).
 export async function createClient() {
   const cookieStore = await cookies();
 
@@ -21,8 +18,7 @@ export async function createClient() {
               cookieStore.set(name, value, options),
             );
           } catch {
-            // Dipanggil dari Server Component yang tidak boleh menulis cookie.
-            // Aman diabaikan: penyegaran sesi ditangani di proxy.ts (nanti Fase 2).
+            // Server Component tidak boleh menulis cookie; ditangani di proxy.
           }
         },
       },

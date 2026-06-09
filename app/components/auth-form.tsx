@@ -1,10 +1,5 @@
 "use client";
 
-// Form auth dipakai bersama oleh halaman Masuk & Daftar (Golden Rule #1:
-// konsisten). Email+password lewat Server Action; tombol Google lewat browser
-// client (OAuth redirect). Google baru jalan setelah provider diaktifkan di
-// Supabase — sebelum itu, klik akan memberi pesan jelas, bukan error misterius.
-
 import { useActionState, useState } from "react";
 import Link from "next/link";
 import { createClient } from "../lib/supabase/client";
@@ -35,11 +30,10 @@ export default function AuthForm({
       setGoogleLoading(false);
       setGoogleError(
         /provider|not enabled|unsupported/i.test(error.message)
-          ? "Login Google belum diaktifkan. Aktifkan dulu di dashboard Supabase."
+          ? "Login Google belum diaktifkan."
           : error.message,
       );
     }
-    // Kalau sukses, browser otomatis dialihkan ke halaman login Google.
   }
 
   return (
@@ -57,7 +51,6 @@ export default function AuthForm({
         </Link>
       </p>
 
-      {/* Tombol Google */}
       <button
         type="button"
         onClick={handleGoogle}
@@ -73,7 +66,6 @@ export default function AuthForm({
         </p>
       )}
 
-      {/* Pembatas */}
       <div className="my-5 flex items-center gap-3 text-xs text-stone-400">
         <span className="h-px flex-1 bg-stone-200 dark:bg-stone-800" />
         atau pakai email

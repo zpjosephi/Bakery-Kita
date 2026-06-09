@@ -1,9 +1,6 @@
 import { cache } from "react";
 import { createClient } from "./supabase/server";
 
-// Lapisan akses data user (server-only). getCurrentUser dibungkus React.cache
-// supaya dipanggil berkali-kali dalam satu request hanya sekali query.
-
 export type Role = "customer" | "admin";
 
 export type CurrentUser = {
@@ -20,7 +17,6 @@ export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
   } = await supabase.auth.getUser();
   if (!user) return null;
 
-  // Ambil role & nama dari tabel profiles (dibuat otomatis saat signup).
   const { data: profile } = await supabase
     .from("profiles")
     .select("role, full_name")
@@ -38,7 +34,6 @@ export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
   };
 });
 
-// Praktis untuk halaman/aksi khusus admin.
 export const isAdmin = cache(async (): Promise<boolean> => {
   const user = await getCurrentUser();
   return user?.role === "admin";
