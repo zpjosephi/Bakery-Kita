@@ -15,7 +15,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "orderId wajib diisi." }, { status: 400 });
   }
 
-  const order = getOrder(orderId);
+  const order = await getOrder(orderId);
   if (!order) {
     return NextResponse.json({ error: "Pesanan tidak ditemukan." }, { status: 404 });
   }
@@ -25,11 +25,11 @@ export async function GET(request: Request) {
     const latest = await fetchTransactionStatus(orderId);
     if (latest) {
       const mapped = mapStatus(latest.transactionStatus, latest.fraudStatus);
-      if (mapped !== order.status) setOrderStatus(orderId, mapped);
+      if (mapped !== order.status) await setOrderStatus(orderId, mapped);
     }
   }
 
-  const fresh = getOrder(orderId)!;
+  const fresh = (await getOrder(orderId))!;
   // Balikkan hanya data yang diperlukan halaman bayar (tanpa kontak pembeli).
   return NextResponse.json({
     orderId: fresh.orderId,

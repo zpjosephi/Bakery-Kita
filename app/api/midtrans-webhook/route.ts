@@ -44,7 +44,7 @@ export async function POST(request: Request) {
   }
 
   // 2) Pastikan pesanannya memang ada di sistem kita.
-  const order = getOrder(n.order_id);
+  const order = await getOrder(n.order_id);
   if (!order) {
     // 200 supaya Midtrans tidak retry terus-menerus untuk order yang tak kita kenal.
     return NextResponse.json({ message: "Order tidak ditemukan, diabaikan." });
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
 
   // 3) Terjemahkan & simpan status baru (mis. settlement → LUNAS).
   const status = mapStatus(n.transaction_status ?? "", n.fraud_status);
-  setOrderStatus(n.order_id, status);
+  await setOrderStatus(n.order_id, status);
 
   // Wajib balas 200 agar Midtrans tahu notifikasi sudah diterima.
   return NextResponse.json({ message: "OK", status });
