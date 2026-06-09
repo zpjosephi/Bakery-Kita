@@ -5,6 +5,7 @@ import { CartProvider } from "./lib/cart";
 import { ProductsProvider } from "./lib/products-context";
 import { getProducts } from "./lib/products-data";
 import CartToast from "./components/cart-toast";
+import SiteFooter from "./components/site-footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,6 +46,7 @@ export default async function RootLayout({
             <CartToast />
           </CartProvider>
         </ProductsProvider>
+        <SiteFooter />
       </body>
     </html>
   );

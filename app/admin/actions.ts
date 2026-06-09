@@ -91,3 +91,19 @@ export async function deleteProduct(formData: FormData): Promise<void> {
   revalidatePath("/admin");
   revalidatePath("/");
 }
+
+// Tandai status pemenuhan pesanan (diproses ⇄ selesai). RLS admin yang menjaga.
+export async function setFulfillment(formData: FormData): Promise<void> {
+  if (!(await isAdmin())) return;
+  const orderId = String(formData.get("orderId") ?? "").trim();
+  const fulfillment = String(formData.get("fulfillment") ?? "");
+  if (!orderId || (fulfillment !== "diproses" && fulfillment !== "selesai")) return;
+
+  const supabase = await createClient();
+  await supabase
+    .from("orders")
+    .update({ fulfillment, updated_at: new Date().toISOString() })
+    .eq("order_id", orderId);
+
+  revalidatePath("/admin/pesanan");
+}

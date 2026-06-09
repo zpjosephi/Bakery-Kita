@@ -76,17 +76,6 @@ export default async function CatalogPage() {
           </ul>
         </section>
       </main>
-
-      <footer className="border-t border-stone-200/70 py-10 dark:border-stone-800">
-        <div className="mx-auto flex max-w-5xl flex-col gap-1 px-6">
-          <p className="text-sm font-medium text-stone-700 dark:text-stone-300">
-            🍞 Bakery Kita
-          </p>
-          <p className="text-sm text-stone-400">
-            Toko contoh untuk belajar pembayaran QRIS (Midtrans Sandbox).
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }
