@@ -21,7 +21,7 @@ export default async function CatalogPage() {
             Roti & kue rumahan, fresh tiap pagi.
           </h1>
           <p className="mt-4 max-w-xl text-lg text-stone-500 dark:text-stone-400">
-            Pilih dari sini, bayar pakai QRIS. Kami siapin hari itu juga.
+            Tinggal pilih, scan, beres. Bayar lewat QRIS.
           </p>
         </section>
 
