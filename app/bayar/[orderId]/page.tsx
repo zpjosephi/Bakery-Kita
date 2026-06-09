@@ -21,6 +21,7 @@ type StatusResponse = {
 
 const SIMULATOR_URL = "https://simulator.sandbox.midtrans.com/v2/qris/index";
 
+// QRIS PAYMENT PAGE
 export default function PayPage() {
   const { orderId } = useParams<{ orderId: string }>();
   const [order, setOrder] = useState<StatusResponse | null>(null);
@@ -99,7 +100,7 @@ export default function PayPage() {
         ) : order.status === "KEDALUWARSA" || order.status === "GAGAL" ? (
           <FailedPanel status={order.status} />
         ) : (
-          // PENDING — tampilkan QR + instruksi simulator.
+          // PENDING — show QR + simulator instructions
           <div className="rounded-2xl border border-stone-200 bg-white p-6 text-center dark:border-stone-800 dark:bg-stone-900/40">
             <h1 className="text-lg font-bold text-stone-900 dark:text-stone-50">
               Scan untuk Bayar

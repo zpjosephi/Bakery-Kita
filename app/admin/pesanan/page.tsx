@@ -16,6 +16,7 @@ function formatTanggal(iso: string): string {
   }).format(new Date(iso));
 }
 
+// ADMIN — incoming orders
 export default async function AdminOrdersPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/masuk");

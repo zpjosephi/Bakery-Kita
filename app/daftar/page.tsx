@@ -6,6 +6,7 @@ import { getCurrentUser } from "../lib/auth";
 
 export const metadata = { title: "Daftar — Bakery Kita" };
 
+// SIGN UP PAGE
 export default async function SignupPage() {
   if (await getCurrentUser()) redirect("/");
 

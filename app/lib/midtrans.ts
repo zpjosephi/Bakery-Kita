@@ -23,6 +23,7 @@ export type ChargeResult = {
 
 type MidtransAction = { name: string; url: string };
 
+// CREATE QRIS (request to Midtrans)
 export async function chargeQris(
   orderId: string,
   amount: number,
@@ -59,6 +60,7 @@ export async function chargeQris(
   };
 }
 
+// CHECK TRANSACTION STATUS (for pay-page polling)
 export async function fetchTransactionStatus(orderId: string): Promise<{
   transactionStatus: string;
   fraudStatus?: string;
@@ -75,7 +77,7 @@ export async function fetchTransactionStatus(orderId: string): Promise<{
   };
 }
 
-// SHA512(order_id + status_code + gross_amount + server_key)
+// VERIFY WEBHOOK — SHA512(order_id + status_code + gross_amount + server_key)
 export function verifySignature(input: {
   orderId: string;
   statusCode: string;
@@ -88,6 +90,7 @@ export function verifySignature(input: {
   return expected === input.signatureKey;
 }
 
+// MAP MIDTRANS STATUS → our order status
 export function mapStatus(
   transactionStatus: string,
   fraudStatus?: string,

@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Notifikasi tidak lengkap." }, { status: 400 });
   }
 
-  // 1) Verifikasi tanda tangan — tolak webhook palsu.
+  // 1) verify signature — reject fake webhooks
   const valid = verifySignature({
     orderId: n.order_id,
     statusCode: n.status_code,
@@ -34,17 +34,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Signature tidak valid." }, { status: 403 });
   }
 
-  // 2) Pastikan pesanannya memang ada di sistem kita.
+  // 2) make sure the order exists
   const order = await getOrder(n.order_id);
   if (!order) {
-    // 200 supaya Midtrans tidak retry terus-menerus untuk order yang tak kita kenal.
+    // 200 so Midtrans stops retrying unknown orders
     return NextResponse.json({ message: "Order tidak ditemukan, diabaikan." });
   }
 
-  // 3) Terjemahkan & simpan status baru (mis. settlement → LUNAS).
+  // 3) map & save the new status (e.g. settlement → LUNAS)
   const status = mapStatus(n.transaction_status ?? "", n.fraud_status);
   await setOrderStatus(n.order_id, status);
 
-  // Wajib balas 200 agar Midtrans tahu notifikasi sudah diterima.
+  // must reply 200 so Midtrans knows it was received
   return NextResponse.json({ message: "OK", status });
 }

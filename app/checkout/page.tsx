@@ -12,6 +12,7 @@ import { buttonClass } from "../components/ui";
 
 type Customer = { nama: string; hp: string; alamat: string };
 
+// CHECKOUT PAGE
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, totalItems, totalPrice, hydrated, clear } = useCart();

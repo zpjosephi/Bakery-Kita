@@ -6,6 +6,7 @@ import { createClient } from "../lib/supabase/client";
 import { buttonClass } from "./ui";
 import type { AuthState } from "../auth/actions";
 
+// shared form for both login and signup
 export default function AuthForm({
   mode,
   action,

@@ -51,6 +51,7 @@ function rowToOrder(r: OrderRow): Order {
   };
 }
 
+// SAVE NEW ORDER
 export async function saveOrder(order: Order): Promise<void> {
   const supabase = createAdminClient();
   const { error } = await supabase.from("orders").insert({
@@ -68,6 +69,7 @@ export async function saveOrder(order: Order): Promise<void> {
   if (error) throw new Error(`Gagal menyimpan pesanan: ${error.message}`);
 }
 
+// GET ONE ORDER
 export async function getOrder(orderId: string): Promise<Order | undefined> {
   const supabase = createAdminClient();
   const { data, error } = await supabase
@@ -79,6 +81,7 @@ export async function getOrder(orderId: string): Promise<Order | undefined> {
   return data ? rowToOrder(data as OrderRow) : undefined;
 }
 
+// UPDATE PAYMENT STATUS (from Midtrans)
 export async function setOrderStatus(
   orderId: string,
   status: OrderStatus,

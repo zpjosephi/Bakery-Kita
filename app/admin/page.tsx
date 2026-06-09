@@ -8,6 +8,7 @@ import AdminProducts from "./admin-products";
 
 export const metadata = { title: "Dashboard Admin — Bakery Kita" };
 
+// ADMIN — manage products
 export default async function AdminPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/masuk");

@@ -36,6 +36,7 @@ function toView(r: Row): OrderView {
   };
 }
 
+// CUSTOMER ORDER HISTORY
 export const getMyOrders = cache(async (): Promise<OrderView[]> => {
   const supabase = await createClient();
   const {
@@ -52,6 +53,7 @@ export const getMyOrders = cache(async (): Promise<OrderView[]> => {
   return (data ?? []).map((r) => toView(r as Row));
 });
 
+// ALL ORDERS (admin)
 export const getAllOrders = cache(async (): Promise<OrderView[]> => {
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -62,6 +64,7 @@ export const getAllOrders = cache(async (): Promise<OrderView[]> => {
   return (data ?? []).map((r) => toView(r as Row));
 });
 
+// STATUS BADGE (label + color)
 export function statusBadge(o: Pick<OrderView, "status" | "fulfillment">): {
   label: string;
   cls: string;

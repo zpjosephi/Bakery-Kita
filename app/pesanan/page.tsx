@@ -15,6 +15,7 @@ function formatTanggal(iso: string): string {
   }).format(new Date(iso));
 }
 
+// ORDER HISTORY (customer)
 export default async function MyOrdersPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/masuk");

@@ -13,7 +13,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Pesanan tidak ditemukan." }, { status: 404 });
   }
 
-  // Selama masih PENDING, tanyakan status terbaru ke Midtrans.
+  // while still PENDING, ask Midtrans for the latest status
   if (order.status === "PENDING") {
     const latest = await fetchTransactionStatus(orderId);
     if (latest) {
@@ -23,7 +23,7 @@ export async function GET(request: Request) {
   }
 
   const fresh = (await getOrder(orderId))!;
-  // Balikkan hanya data yang diperlukan halaman bayar (tanpa kontak pembeli).
+  // return only what the pay page needs (no buyer contact)
   return NextResponse.json({
     orderId: fresh.orderId,
     status: fresh.status,

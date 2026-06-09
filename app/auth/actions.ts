@@ -22,6 +22,7 @@ function pesanError(raw: string): string {
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
+// LOGIN
 export async function login(
   _prev: AuthState,
   formData: FormData,
@@ -40,6 +41,7 @@ export async function login(
   redirect("/");
 }
 
+// SIGN UP
 export async function signup(
   _prev: AuthState,
   formData: FormData,
@@ -70,6 +72,7 @@ export async function signup(
   redirect("/");
 }
 
+// LOGOUT
 export async function logout() {
   const supabase = await createClient();
   await supabase.auth.signOut();
