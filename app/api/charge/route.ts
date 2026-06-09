@@ -3,6 +3,7 @@ import { randomUUID } from "crypto";
 import { getProductById } from "../../lib/products-data";
 import { chargeQris } from "../../lib/midtrans";
 import { saveOrder, type OrderItem } from "../../lib/orders";
+import { getCurrentUser } from "../../lib/auth";
 
 // Fase 3 — POST /api/charge
 // Dipanggil dari halaman checkout. Tugasnya: hitung ulang total DI SERVER
@@ -63,8 +64,12 @@ export async function POST(request: Request) {
   try {
     const { qrString, qrImageUrl, expiryTime } = await chargeQris(orderId, amount);
 
-    saveOrder({
+    // Kalau pembeli sedang login, kaitkan pesanan ke akunnya (untuk riwayat).
+    const user = await getCurrentUser();
+
+    await saveOrder({
       orderId,
+      userId: user?.id ?? null,
       amount,
       status: "PENDING",
       customer: {

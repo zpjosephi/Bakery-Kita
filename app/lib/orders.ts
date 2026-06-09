@@ -1,13 +1,12 @@
 import "server-only";
+import { createAdminClient } from "./supabase/admin";
 
-// Fase 3 — Penyimpanan pesanan SEMENTARA (di memori server).
+// Penyimpanan pesanan di DATABASE (Supabase). Menggantikan store in-memory lama
+// yang tidak cocok untuk produksi serverless (tiap instance tak berbagi memori).
 //
-// Untuk belajar, kita simpan pesanan di sebuah Map di RAM server. Konsekuensinya:
-// data HILANG setiap server dev di-restart, dan tidak cocok untuk produksi
-// (banyak instance server tidak berbagi memori). Di Fase 4 ini diganti Supabase.
-//
-// `import "server-only"` memastikan file ini tidak ikut ter-bundle ke browser
-// (mencegah data/logika server bocor ke client).
+// Memakai klien SERVICE ROLE: pesanan dibuat & dibaca server tanpa sesi user
+// (checkout boleh anonim, webhook tanpa login). Tabel `orders` dikunci RLS,
+// hanya service_role yang boleh menyentuhnya → data pembeli tetap privat.
 
 export type OrderStatus = "PENDING" | "LUNAS" | "GAGAL" | "KEDALUWARSA";
 
@@ -20,31 +19,82 @@ export type OrderItem = {
 
 export type Order = {
   orderId: string;
-  amount: number; // total dalam Rupiah (dihitung ulang di server, bukan dari client)
+  userId?: string | null; // terisi kalau pembeli sedang login
+  amount: number; // total Rupiah (dihitung ulang di server)
   status: OrderStatus;
   customer: { nama: string; hp: string; alamat: string };
   items: OrderItem[];
-  qrString: string; // isi QRIS untuk dirender jadi gambar QR
-  qrImageUrl?: string; // URL gambar QR (untuk ditempel ke QRIS Simulator sandbox)
+  qrString: string;
+  qrImageUrl?: string;
   createdAt: string;
   expiryTime?: string;
 };
 
-// globalThis dipakai supaya Map tetap sama walau modul di-reload saat dev
-// (hot reload Next.js bisa mengevaluasi ulang modul; ini mencegah store kereset).
-const store: Map<string, Order> =
-  (globalThis as { __orderStore?: Map<string, Order> }).__orderStore ??
-  ((globalThis as { __orderStore?: Map<string, Order> }).__orderStore = new Map());
+// Bentuk baris di tabel (snake_case) → dipetakan ke Order (camelCase).
+type OrderRow = {
+  order_id: string;
+  user_id: string | null;
+  amount: number;
+  status: OrderStatus;
+  customer: Order["customer"];
+  items: OrderItem[];
+  qr_string: string;
+  qr_image_url: string | null;
+  created_at: string;
+  expiry_time: string | null;
+};
 
-export function saveOrder(order: Order): void {
-  store.set(order.orderId, order);
+function rowToOrder(r: OrderRow): Order {
+  return {
+    orderId: r.order_id,
+    userId: r.user_id,
+    amount: r.amount,
+    status: r.status,
+    customer: r.customer,
+    items: r.items,
+    qrString: r.qr_string,
+    qrImageUrl: r.qr_image_url ?? undefined,
+    createdAt: r.created_at,
+    expiryTime: r.expiry_time ?? undefined,
+  };
 }
 
-export function getOrder(orderId: string): Order | undefined {
-  return store.get(orderId);
+export async function saveOrder(order: Order): Promise<void> {
+  const supabase = createAdminClient();
+  const { error } = await supabase.from("orders").insert({
+    order_id: order.orderId,
+    user_id: order.userId ?? null,
+    amount: order.amount,
+    status: order.status,
+    customer: order.customer,
+    items: order.items,
+    qr_string: order.qrString,
+    qr_image_url: order.qrImageUrl ?? null,
+    expiry_time: order.expiryTime ?? null,
+    created_at: order.createdAt,
+  });
+  if (error) throw new Error(`Gagal menyimpan pesanan: ${error.message}`);
 }
 
-export function setOrderStatus(orderId: string, status: OrderStatus): void {
-  const order = store.get(orderId);
-  if (order) store.set(orderId, { ...order, status });
+export async function getOrder(orderId: string): Promise<Order | undefined> {
+  const supabase = createAdminClient();
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*")
+    .eq("order_id", orderId)
+    .maybeSingle();
+  if (error) throw new Error(`Gagal memuat pesanan: ${error.message}`);
+  return data ? rowToOrder(data as OrderRow) : undefined;
+}
+
+export async function setOrderStatus(
+  orderId: string,
+  status: OrderStatus,
+): Promise<void> {
+  const supabase = createAdminClient();
+  const { error } = await supabase
+    .from("orders")
+    .update({ status, updated_at: new Date().toISOString() })
+    .eq("order_id", orderId);
+  if (error) throw new Error(`Gagal memperbarui status pesanan: ${error.message}`);
 }
