@@ -1,13 +1,6 @@
 import "server-only";
 import { createAdminClient } from "./supabase/admin";
 
-// Penyimpanan pesanan di DATABASE (Supabase). Menggantikan store in-memory lama
-// yang tidak cocok untuk produksi serverless (tiap instance tak berbagi memori).
-//
-// Memakai klien SERVICE ROLE: pesanan dibuat & dibaca server tanpa sesi user
-// (checkout boleh anonim, webhook tanpa login). Tabel `orders` dikunci RLS,
-// hanya service_role yang boleh menyentuhnya → data pembeli tetap privat.
-
 export type OrderStatus = "PENDING" | "LUNAS" | "GAGAL" | "KEDALUWARSA";
 
 export type OrderItem = {
@@ -19,8 +12,8 @@ export type OrderItem = {
 
 export type Order = {
   orderId: string;
-  userId?: string | null; // terisi kalau pembeli sedang login
-  amount: number; // total Rupiah (dihitung ulang di server)
+  userId?: string | null;
+  amount: number;
   status: OrderStatus;
   customer: { nama: string; hp: string; alamat: string };
   items: OrderItem[];
@@ -30,7 +23,6 @@ export type Order = {
   expiryTime?: string;
 };
 
-// Bentuk baris di tabel (snake_case) → dipetakan ke Order (camelCase).
 type OrderRow = {
   order_id: string;
   user_id: string | null;

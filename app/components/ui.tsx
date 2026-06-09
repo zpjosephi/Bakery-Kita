@@ -1,8 +1,5 @@
 import type { ButtonHTMLAttributes } from "react";
 
-// Primitif UI dipakai-ulang → menjaga KONSISTENSI (Golden Rule #1) dan membakukan
-// keadaan fokus/hover/disabled (mendukung aksesibilitas, Golden Rule #2).
-
 type Variant = "primary" | "secondary" | "ghost" | "danger";
 type Size = "sm" | "md" | "lg";
 
@@ -27,7 +24,6 @@ const SIZES: Record<Size, string> = {
   lg: "h-12 px-6 text-[15px]",
 };
 
-// Helper className — dipakai juga oleh <Link> agar tautan tampil seperti tombol.
 export function buttonClass(variant: Variant = "primary", size: Size = "md") {
   return `${BASE} ${VARIANTS[variant]} ${SIZES[size]}`;
 }

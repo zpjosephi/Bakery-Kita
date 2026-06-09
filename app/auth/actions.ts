@@ -4,12 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "../lib/supabase/server";
 
-// Server Actions untuk auth. Selalu jalan di server → aman pegang kredensial.
-// State dikembalikan ke form (lewat useActionState) untuk menampilkan pesan.
-
 export type AuthState = { error?: string; message?: string } | undefined;
 
-// Terjemahkan pesan error Supabase (Inggris) ke Bahasa Indonesia yang ramah.
 function pesanError(raw: string): string {
   const m = raw.toLowerCase();
   if (m.includes("invalid login credentials")) return "Email atau password salah.";
@@ -21,7 +17,7 @@ function pesanError(raw: string): string {
     return "Password terlalu pendek (minimal 6 karakter).";
   if (m.includes("rate limit") || m.includes("too many"))
     return "Terlalu banyak percobaan. Tunggu sebentar lalu coba lagi.";
-  return raw; // fallback: tampilkan apa adanya
+  return raw;
 }
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
@@ -60,21 +56,16 @@ export async function signup(
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    // full_name masuk ke raw_user_meta_data → dibaca trigger handle_new_user
-    // untuk mengisi kolom profiles.full_name.
     options: { data: { full_name: name } },
   });
   if (error) return { error: pesanError(error.message) };
 
-  // Kalau konfirmasi email AKTIF di Supabase, session belum ada → minta cek email.
   if (!data.session) {
     return {
-      message:
-        "Akun berhasil dibuat! Cek email kamu untuk konfirmasi, lalu masuk.",
+      message: "Akun berhasil dibuat! Cek email kamu untuk konfirmasi, lalu masuk.",
     };
   }
 
-  // Konfirmasi email nonaktif → langsung login.
   revalidatePath("/", "layout");
   redirect("/");
 }

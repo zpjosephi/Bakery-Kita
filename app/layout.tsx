@@ -27,8 +27,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Produk diambil sekali dari DB di server, lalu dibagikan ke seluruh halaman
-  // (termasuk Client Component keranjang) lewat ProductsProvider.
   const products = await getProducts();
 
   return (
@@ -38,8 +36,6 @@ export default async function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        {/* ProductsProvider menyediakan data produk; CartProvider memakainya
-            untuk menyusun isi keranjang. Keduanya membungkus seluruh halaman. */}
         <ProductsProvider products={products}>
           <CartProvider>
             {children}

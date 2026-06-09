@@ -1,8 +1,5 @@
 "use client";
 
-// Halaman Checkout (modern minimalis, palet stone + caramel).
-// "Bayar dengan QRIS" → POST /api/charge → redirect ke /bayar/[orderId].
-
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -31,7 +28,6 @@ export default function CheckoutPage() {
   function validate(): boolean {
     const next: Partial<Customer> = {};
     if (form.nama.trim().length < 2) next.nama = "Nama wajib diisi.";
-    // No. HP Indonesia sederhana: diawali 0 atau +62, lalu 8–14 digit.
     if (!/^(\+62|0)\d{8,14}$/.test(form.hp.replace(/[\s-]/g, "")))
       next.hp = "No. HP tidak valid (contoh: 08123456789).";
     if (form.alamat.trim().length < 5) next.alamat = "Alamat wajib diisi.";
@@ -51,7 +47,6 @@ export default function CheckoutPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           customer: form,
-          // Kirim id + qty saja; harga & total dihitung ulang di server.
           items: items.map((i) => ({ id: i.product.id, qty: i.qty })),
         }),
       });
@@ -66,7 +61,6 @@ export default function CheckoutPage() {
     }
   }
 
-  // ── Keranjang kosong ───────────────────────────────────────────────────
   if (hydrated && items.length === 0) {
     return (
       <div className="min-h-screen">
@@ -84,7 +78,6 @@ export default function CheckoutPage() {
     );
   }
 
-  // ── Form checkout ──────────────────────────────────────────────────────
   return (
     <div className="min-h-screen">
       <SiteHeader back={{ href: "/keranjang", label: "← Kembali ke keranjang" }} />
@@ -96,7 +89,6 @@ export default function CheckoutPage() {
         </h1>
 
         <div className="grid gap-6 md:grid-cols-5">
-          {/* Form data pembeli */}
           <form
             onSubmit={handleSubmit}
             className="rounded-2xl border border-stone-200 bg-white p-6 md:col-span-3 dark:border-stone-800 dark:bg-stone-900/40"
@@ -160,7 +152,6 @@ export default function CheckoutPage() {
             </p>
           </form>
 
-          {/* Ringkasan pesanan (selalu terlihat → Golden Rule #8: kurangi beban ingatan) */}
           <aside className="h-fit rounded-2xl border border-stone-200 bg-white p-6 md:col-span-2 dark:border-stone-800 dark:bg-stone-900/40">
             <h2 className="mb-4 font-semibold text-stone-900 dark:text-stone-50">
               Ringkasan
@@ -208,7 +199,6 @@ function Spinner() {
   );
 }
 
-// Komponen input kecil agar form tidak berulang (Golden Rule #1: konsisten).
 function Field({
   label,
   value,

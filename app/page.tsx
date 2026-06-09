@@ -4,8 +4,6 @@ import ProductCartControl from "./components/product-cart-control";
 import ProductThumb from "./components/product-thumb";
 import SiteHeader from "./components/site-header";
 
-// Halaman Katalog (gaya modern minimalis, palet stone + caramel).
-// Server Component; bagian interaktif dipisah ke Client Component.
 export default async function CatalogPage() {
   const products = await getProducts();
 
@@ -14,7 +12,6 @@ export default async function CatalogPage() {
       <SiteHeader />
 
       <main className="mx-auto max-w-5xl px-6">
-        {/* Hero */}
         <section className="py-14 sm:py-20">
           <p className="text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
             Fresh tiap pagi
@@ -27,7 +24,6 @@ export default async function CatalogPage() {
           </p>
         </section>
 
-        {/* Grid produk */}
         <section className="pb-20">
           <div className="mb-6 flex items-baseline justify-between border-b border-stone-200/70 pb-3 dark:border-stone-800">
             <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-50">
@@ -46,7 +42,6 @@ export default async function CatalogPage() {
                     image={product.image}
                     emoji={product.emoji}
                     name={product.name}
-                    // 3 gambar pertama (baris atas) dimuat duluan → perbaiki LCP.
                     priority={i < 3}
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="object-cover transition duration-500 group-hover:scale-105"

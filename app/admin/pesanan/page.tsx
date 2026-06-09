@@ -98,7 +98,6 @@ export default async function AdminOrdersPage() {
                       {formatRupiah(o.amount)}
                     </span>
 
-                    {/* Aksi pemenuhan hanya untuk pesanan yang sudah dibayar */}
                     {paid &&
                       (o.fulfillment === "diproses" ? (
                         <form action={setFulfillment}>

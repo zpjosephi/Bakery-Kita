@@ -9,7 +9,6 @@ import AdminProducts from "./admin-products";
 export const metadata = { title: "Dashboard Admin — Bakery Kita" };
 
 export default async function AdminPage() {
-  // Pagar akses: harus login DAN role admin. (Lapis kedua selain RLS & cek di action.)
   const user = await getCurrentUser();
   if (!user) redirect("/masuk");
   if (user.role !== "admin") redirect("/");

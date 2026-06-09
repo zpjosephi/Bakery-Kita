@@ -4,14 +4,9 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "../lib/supabase/server";
 import { isAdmin } from "../lib/auth";
 
-// Server Actions pengelolaan produk. Dua lapis pengaman:
-// 1) cek isAdmin() di sini, 2) RLS di database (products_admin_write).
-// Klien Supabase server membawa sesi admin → RLS mengizinkan tulis.
-
 export type AdminState = { error?: string; ok?: string } | undefined;
 
 function parseHarga(v: FormDataEntryValue | null): number | null {
-  // Buang titik/koma/spasi (mis. "12.000") → 12000.
   const n = Math.round(Number(String(v ?? "").replace(/[^\d]/g, "")));
   return Number.isFinite(n) && n >= 0 ? n : null;
 }
@@ -30,7 +25,7 @@ export async function saveProduct(
 ): Promise<AdminState> {
   if (!(await isAdmin())) return { error: "Akses ditolak — khusus admin." };
 
-  const id = String(formData.get("id") ?? "").trim(); // ada = edit, kosong = baru
+  const id = String(formData.get("id") ?? "").trim();
   const name = String(formData.get("name") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
   const emoji = String(formData.get("emoji") ?? "").trim();
@@ -60,8 +55,6 @@ export async function saveProduct(
       .eq("id", id);
     if (error) return { error: error.message };
   } else {
-    // Nama biasanya menghasilkan slug; kalau tidak (mis. nama berupa emoji),
-    // pakai id acak agar tetap unik.
     const newId = slugify(name) || `produk-${crypto.randomUUID().slice(0, 8)}`;
     const { error } = await supabase
       .from("products")
@@ -76,7 +69,7 @@ export async function saveProduct(
   }
 
   revalidatePath("/admin");
-  revalidatePath("/"); // katalog publik ikut diperbarui
+  revalidatePath("/");
   return { ok: id ? "Perubahan tersimpan." : `Produk "${name}" ditambahkan.` };
 }
 
@@ -92,7 +85,6 @@ export async function deleteProduct(formData: FormData): Promise<void> {
   revalidatePath("/");
 }
 
-// Tandai status pemenuhan pesanan (diproses ⇄ selesai). RLS admin yang menjaga.
 export async function setFulfillment(formData: FormData): Promise<void> {
   if (!(await isAdmin())) return;
   const orderId = String(formData.get("orderId") ?? "").trim();

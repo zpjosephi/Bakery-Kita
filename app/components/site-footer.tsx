@@ -1,5 +1,3 @@
-// Footer global (tampil di semua halaman lewat layout). Memuat "watermark"
-// kredit pembuat + catatan bahwa ini demo sandbox.
 export default function SiteFooter() {
   return (
     <footer className="mt-auto border-t border-stone-200/70 py-8 dark:border-stone-800">

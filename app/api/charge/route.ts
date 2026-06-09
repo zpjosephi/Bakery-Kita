@@ -5,11 +5,6 @@ import { chargeQris } from "../../lib/midtrans";
 import { saveOrder, type OrderItem } from "../../lib/orders";
 import { getCurrentUser } from "../../lib/auth";
 
-// Fase 3 — POST /api/charge
-// Dipanggil dari halaman checkout. Tugasnya: hitung ulang total DI SERVER
-// (jangan percaya angka dari client!), minta QRIS ke Midtrans, simpan pesanan,
-// lalu balikkan qr_string + orderId agar halaman bayar bisa menampilkan QR.
-
 type ChargeBody = {
   customer?: { nama?: string; hp?: string; alamat?: string };
   items?: { id?: string; qty?: number }[];
@@ -25,7 +20,6 @@ export async function POST(request: Request) {
 
   const { customer, items } = body;
 
-  // Validasi data pembeli (lapis kedua; frontend juga sudah memvalidasi).
   if (
     !customer?.nama?.trim() ||
     !customer?.hp?.trim() ||
@@ -41,8 +35,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Keranjang kosong." }, { status: 400 });
   }
 
-  // Hitung ulang total dari harga resmi di server. Ini penting: kalau kita
-  // percaya "amount" kiriman client, orang iseng bisa bayar Rp 1 untuk roti mahal.
   const orderItems: OrderItem[] = [];
   let amount = 0;
   for (const line of items) {
@@ -58,13 +50,11 @@ export async function POST(request: Request) {
     orderItems.push({ id: product.id, name: product.name, price: product.price, qty });
   }
 
-  // ID unik tiap pesanan. Midtrans menolak order_id yang sudah pernah dipakai.
   const orderId = `ORDER-${Date.now()}-${randomUUID().slice(0, 8)}`;
 
   try {
     const { qrString, qrImageUrl, expiryTime } = await chargeQris(orderId, amount);
 
-    // Kalau pembeli sedang login, kaitkan pesanan ke akunnya (untuk riwayat).
     const user = await getCurrentUser();
 
     await saveOrder({

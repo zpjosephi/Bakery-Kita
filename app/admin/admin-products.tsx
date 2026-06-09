@@ -1,9 +1,5 @@
 "use client";
 
-// UI pengelolaan produk. Tiap produk = satu <form> sendiri (pakai useActionState
-// untuk pesan sukses/error per kartu). Tombol "Hapus" memakai `formAction` pada
-// form yang sama → tidak ada form bersarang (HTML invalid).
-
 import { useActionState, useState } from "react";
 import { saveProduct, deleteProduct, type AdminState } from "./actions";
 import { formatRupiah } from "../lib/products";
@@ -50,8 +46,6 @@ function ProductCard({ product }: { product: AdminProduct | null }) {
   );
   const isNew = !product;
 
-  // Field foto dibuat "controlled" supaya hasil upload bisa mengisinya otomatis,
-  // tapi tetap boleh diketik manual (path/URL) — jadi dua-duanya bisa.
   const [imageVal, setImageVal] = useState(product?.image ?? "");
   const [emojiVal, setEmojiVal] = useState(product?.emoji ?? "");
   const [uploading, setUploading] = useState(false);
@@ -65,7 +59,6 @@ function ProductCard({ product }: { product: AdminProduct | null }) {
     try {
       const supabase = createClient();
       const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
-      // Nama file unik biar tidak saling menimpa.
       const path = `produk-${Date.now()}-${Math.random()
         .toString(36)
         .slice(2, 8)}.${ext}`;
@@ -86,7 +79,7 @@ function ProductCard({ product }: { product: AdminProduct | null }) {
       );
     } finally {
       setUploading(false);
-      e.target.value = ""; // reset agar bisa pilih file yang sama lagi
+      e.target.value = "";
     }
   }
 
@@ -158,7 +151,6 @@ function ProductCard({ product }: { product: AdminProduct | null }) {
           hint="Upload gambar, atau tempel path/URL manual. Kosong → pakai emoji."
         >
           <div className="mt-1 flex items-start gap-3">
-            {/* Pratinjau */}
             <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-stone-100 ring-1 ring-stone-900/5 dark:bg-stone-800 dark:ring-white/10">
               <ProductThumb
                 image={imageVal}
@@ -177,7 +169,6 @@ function ProductCard({ product }: { product: AdminProduct | null }) {
                 disabled={uploading}
                 className="block w-full cursor-pointer text-xs text-stone-500 file:mr-3 file:rounded-lg file:border-0 file:bg-brand-600 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-brand-700 disabled:opacity-60 dark:text-stone-400"
               />
-              {/* name="image" → nilai inilah yang tersimpan ke DB */}
               <input
                 name="image"
                 value={imageVal}

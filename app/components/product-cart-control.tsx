@@ -1,15 +1,11 @@
 "use client";
 
-// Kontrol di kartu katalog: kalau belum di keranjang → tombol "Tambah";
-// kalau sudah → stepper −/+ (Golden Rule #6: aksi mudah dibalik langsung di sini).
-
 import { useCart } from "../lib/cart";
 
 export default function ProductCartControl({ id }: { id: string }) {
   const { items, add, setQty, hydrated } = useCart();
   const qty = items.find((i) => i.product.id === id)?.qty ?? 0;
 
-  // Sebelum localStorage terbaca, default ke tombol "Tambah" (cegah kedip).
   if (!hydrated || qty === 0) {
     return (
       <button

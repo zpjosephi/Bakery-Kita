@@ -1,7 +1,5 @@
 "use client";
 
-// Halaman Keranjang (modern minimalis, palet stone + caramel).
-
 import { useState } from "react";
 import Link from "next/link";
 import { useCart } from "../lib/cart";
@@ -14,8 +12,6 @@ import { buttonClass } from "../components/ui";
 export default function CartPage() {
   const { items, totalItems, totalPrice, setQty, remove, clear, hydrated } =
     useCart();
-  // Konfirmasi dua langkah untuk "Kosongkan" — Golden Rule #5 (cegah kesalahan)
-  // & #6 (mudah dibatalkan).
   const [confirmClear, setConfirmClear] = useState(false);
 
   return (
@@ -29,7 +25,6 @@ export default function CartPage() {
         </h1>
 
         {!hydrated ? (
-          // Skeleton loading — feedback bahwa data sedang dimuat (Golden Rule #3).
           <ul className="space-y-3" aria-hidden>
             {[0, 1].map((i) => (
               <li
@@ -85,7 +80,6 @@ export default function CartPage() {
                     </button>
                   </div>
 
-                  {/* Stepper jumlah */}
                   <div className="flex h-10 items-center gap-1 rounded-full border border-stone-200 px-1 dark:border-stone-700">
                     <button
                       type="button"
@@ -115,7 +109,6 @@ export default function CartPage() {
               ))}
             </ul>
 
-            {/* Ringkasan total */}
             <div className="mt-6 rounded-2xl border border-stone-200 bg-white p-5 dark:border-stone-800 dark:bg-stone-900/40">
               <div className="flex items-center justify-between text-sm text-stone-500">
                 <span>Total item</span>
