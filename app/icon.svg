@@ -1,28 +1,11 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="32" height="32" rx="7" fill="#f7f3ec"/>
-  <g stroke="#44403c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="#44403c">
-    <!-- stem -->
-    <path d="M16 27 V11" fill="none"/>
-    <!-- bottom leaves / blades -->
-    <path d="M16 24 C12.5 23 10.5 21 10 18" fill="none"/>
-    <path d="M16 24 C19.5 23 21.5 21 22 18" fill="none"/>
-    <!-- grain kernels: top tip -->
-    <g transform="translate(16 11)">
-      <path d="M0 0 C-2.2 -1.6 -2.2 -5 0 -7.2 C2.2 -5 2.2 -1.6 0 0 Z"/>
-    </g>
-    <!-- pair 1 -->
-    <g transform="translate(16 14) rotate(-30)">
-      <path d="M0 0 C-2.2 -1.6 -2.2 -5 0 -7.2 C2.2 -5 2.2 -1.6 0 0 Z"/>
-    </g>
-    <g transform="translate(16 14) rotate(30)">
-      <path d="M0 0 C-2.2 -1.6 -2.2 -5 0 -7.2 C2.2 -5 2.2 -1.6 0 0 Z"/>
-    </g>
-    <!-- pair 2 -->
-    <g transform="translate(16 18) rotate(-30)">
-      <path d="M0 0 C-2.2 -1.6 -2.2 -5 0 -7.2 C2.2 -5 2.2 -1.6 0 0 Z"/>
-    </g>
-    <g transform="translate(16 18) rotate(30)">
-      <path d="M0 0 C-2.2 -1.6 -2.2 -5 0 -7.2 C2.2 -5 2.2 -1.6 0 0 Z"/>
-    </g>
+  <rect width="32" height="32" rx="8" fill="#a25c18"/>
+  <!-- bread loaf -->
+  <path d="M9 21 L9 16.5 C9 12.5 12 11 16 11 C20 11 23 12.5 23 16.5 L23 21 C23 21.6 22.6 22 22 22 L10 22 C9.4 22 9 21.6 9 21 Z" fill="#fbf5ec"/>
+  <!-- crust scoring -->
+  <g stroke="#a25c18" stroke-width="1.5" stroke-linecap="round">
+    <path d="M12.8 15.2 l2 4"/>
+    <path d="M15.9 14.4 l2 4"/>
+    <path d="M19 15.2 l2 4"/>
   </g>
 </svg>
