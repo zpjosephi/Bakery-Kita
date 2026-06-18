@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 import { saveProduct, deleteProduct, type AdminState } from "./actions";
 import { formatRupiah } from "../lib/products";
 import { createClient } from "../lib/supabase/client";
+import { useI18n } from "../lib/i18n/context";
 import { buttonClass } from "../components/ui";
 import ProductThumb from "../components/product-thumb";
 import type { AdminProduct } from "../lib/products-data";
@@ -13,18 +14,21 @@ export default function AdminProducts({
 }: {
   products: AdminProduct[];
 }) {
+  const { t } = useI18n();
   const [showAdd, setShowAdd] = useState(false);
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-3">
-        <p className="text-sm text-stone-500">{products.length} produk</p>
+        <p className="text-sm text-stone-500">
+          {t.admin.productCount(products.length)}
+        </p>
         <button
           type="button"
           onClick={() => setShowAdd((v) => !v)}
           className={buttonClass(showAdd ? "ghost" : "primary", "md")}
         >
-          {showAdd ? "Tutup form" : "+ Tambah produk"}
+          {showAdd ? t.admin.closeForm : t.admin.addProduct}
         </button>
       </div>
 
@@ -40,6 +44,7 @@ export default function AdminProducts({
 }
 
 function ProductCard({ product }: { product: AdminProduct | null }) {
+  const { t } = useI18n();
   const [state, action, pending] = useActionState<AdminState, FormData>(
     saveProduct,
     undefined,
@@ -69,12 +74,12 @@ function ProductCard({ product }: { product: AdminProduct | null }) {
       const { data } = supabase.storage.from("products").getPublicUrl(path);
       setImageVal(data.publicUrl);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : "Upload gagal.";
+      const msg = err instanceof Error ? err.message : t.admin.uploadFailed;
       setUploadErr(
         /bucket not found/i.test(msg)
-          ? "Bucket 'products' belum dibuat — jalankan supabase/storage.sql dulu."
+          ? t.admin.bucketMissing
           : /row-level security|unauthorized|403/i.test(msg)
-            ? "Tidak diizinkan upload (pastikan kamu admin & storage.sql sudah dijalankan)."
+            ? t.admin.uploadNotAllowed
             : msg,
       );
     } finally {
@@ -95,17 +100,17 @@ function ProductCard({ product }: { product: AdminProduct | null }) {
       {!isNew && <input type="hidden" name="id" value={product.id} />}
 
       <div className="grid gap-3 sm:grid-cols-6">
-        <Field className="sm:col-span-4" label="Nama produk">
+        <Field className="sm:col-span-4" label={t.admin.productName}>
           <input
             name="name"
             defaultValue={product?.name ?? ""}
-            placeholder="mis. Roti Pisang"
+            placeholder={t.admin.productNamePlaceholder}
             className={inputCls}
             required
           />
         </Field>
 
-        <Field className="sm:col-span-2" label="Harga (Rp)">
+        <Field className="sm:col-span-2" label={t.admin.price}>
           <input
             name="price"
             defaultValue={product?.price ?? ""}
@@ -116,16 +121,16 @@ function ProductCard({ product }: { product: AdminProduct | null }) {
           />
         </Field>
 
-        <Field className="sm:col-span-4" label="Deskripsi">
+        <Field className="sm:col-span-4" label={t.admin.description}>
           <input
             name="description"
             defaultValue={product?.description ?? ""}
-            placeholder="Penjelasan singkat produk"
+            placeholder={t.admin.descPlaceholder}
             className={inputCls}
           />
         </Field>
 
-        <Field className="sm:col-span-1" label="Emoji">
+        <Field className="sm:col-span-1" label={t.admin.emoji}>
           <input
             name="emoji"
             value={emojiVal}
@@ -136,7 +141,7 @@ function ProductCard({ product }: { product: AdminProduct | null }) {
           />
         </Field>
 
-        <Field className="sm:col-span-1" label="Urutan">
+        <Field className="sm:col-span-1" label={t.admin.order}>
           <input
             name="sort_order"
             defaultValue={product?.sort_order ?? 0}
@@ -147,15 +152,15 @@ function ProductCard({ product }: { product: AdminProduct | null }) {
 
         <Field
           className="sm:col-span-6"
-          label="Foto produk (opsional)"
-          hint="Upload gambar, atau tempel path/URL manual. Kosong → pakai emoji."
+          label={t.admin.photo}
+          hint={t.admin.photoHint}
         >
           <div className="mt-1 flex items-start gap-3">
             <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-stone-100 ring-1 ring-stone-900/5 dark:bg-stone-800 dark:ring-white/10">
               <ProductThumb
                 image={imageVal}
                 emoji={emojiVal}
-                name="Pratinjau"
+                name={t.admin.preview}
                 sizes="64px"
                 emojiClassName="text-2xl"
               />
@@ -173,11 +178,13 @@ function ProductCard({ product }: { product: AdminProduct | null }) {
                 name="image"
                 value={imageVal}
                 onChange={(e) => setImageVal(e.target.value)}
-                placeholder="/products/nama.jpg atau URL hasil upload"
+                placeholder={t.admin.imagePlaceholder}
                 className={inputCls}
               />
               {uploading && (
-                <span className="text-xs text-stone-400">Mengupload…</span>
+                <span className="text-xs text-stone-400">
+                  {t.admin.uploading}
+                </span>
               )}
               {uploadErr && (
                 <span className="block text-xs text-red-500">{uploadErr}</span>
@@ -194,7 +201,7 @@ function ProductCard({ product }: { product: AdminProduct | null }) {
           defaultChecked={product?.is_active ?? true}
           className="h-4 w-4 rounded border-stone-300 accent-brand-600"
         />
-        Tampilkan di katalog
+        {t.admin.showInCatalog}
       </label>
 
       {state?.error && (
@@ -220,29 +227,29 @@ function ProductCard({ product }: { product: AdminProduct | null }) {
           disabled={pending}
           className={buttonClass("primary", "md")}
         >
-          {pending ? "Menyimpan…" : isNew ? "Tambah produk" : "Simpan"}
+          {pending
+            ? t.admin.saving
+            : isNew
+              ? t.admin.addProductSubmit
+              : t.admin.save}
         </button>
 
         {!isNew && (
           <>
             <span className="text-xs text-stone-400">
-              Harga sekarang: {formatRupiah(product.price)}
+              {t.admin.currentPrice(formatRupiah(product.price))}
             </span>
             <button
               type="submit"
               formAction={deleteProduct}
               formNoValidate
               onClick={(e) => {
-                if (
-                  !confirm(
-                    `Hapus "${product.name}"? Tindakan ini permanen dan tidak bisa dibatalkan.`,
-                  )
-                )
+                if (!confirm(t.admin.confirmDelete(product.name)))
                   e.preventDefault();
               }}
               className={`ml-auto ${buttonClass("danger", "md")}`}
             >
-              Hapus
+              {t.admin.delete}
             </button>
           </>
         )}

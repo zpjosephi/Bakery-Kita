@@ -1,6 +1,7 @@
 import Link from "next/link";
 import CartBadge from "./cart-badge";
 import AccountMenu from "./account-menu";
+import LanguageToggle from "./language-toggle";
 
 export default function SiteHeader({
   back,
@@ -32,6 +33,7 @@ export default function SiteHeader({
         )}
 
         <div className="ml-auto flex items-center gap-2 sm:gap-3">
+          <LanguageToggle />
           <CartBadge />
           <AccountMenu />
         </div>

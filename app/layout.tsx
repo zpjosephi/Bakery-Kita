@@ -4,6 +4,8 @@ import "./globals.css";
 import { CartProvider } from "./lib/cart";
 import { ProductsProvider } from "./lib/products-context";
 import { getProducts } from "./lib/products-data";
+import { I18nProvider } from "./lib/i18n/context";
+import { getDict, getLocale } from "./lib/i18n/server";
 import CartToast from "./components/cart-toast";
 import SiteFooter from "./components/site-footer";
 
@@ -17,32 +19,37 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Bakery Kita — Katalog & Pesan Online",
-  description: "Katalog roti & kue segar. Pesan dan bayar lewat QRIS.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getDict();
+  return {
+    title: t.meta.homeTitle,
+    description: t.meta.homeDescription,
+  };
+}
 
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const products = await getProducts();
+  const [products, locale] = await Promise.all([getProducts(), getLocale()]);
 
   return (
     <html
-      lang="id"
+      lang={locale}
       data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <ProductsProvider products={products}>
-          <CartProvider>
-            {children}
-            <CartToast />
-          </CartProvider>
-        </ProductsProvider>
-        <SiteFooter />
+        <I18nProvider initialLocale={locale}>
+          <ProductsProvider products={products}>
+            <CartProvider>
+              {children}
+              <CartToast />
+            </CartProvider>
+          </ProductsProvider>
+          <SiteFooter />
+        </I18nProvider>
       </body>
     </html>
   );

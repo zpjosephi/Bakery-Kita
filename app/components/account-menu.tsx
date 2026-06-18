@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "../lib/supabase/client";
+import { useI18n } from "../lib/i18n/context";
 import { buttonClass } from "./ui";
 
 type Account = { name: string; role: "customer" | "admin" };
@@ -11,6 +12,7 @@ type Account = { name: string; role: "customer" | "admin" };
 // header account area — login/signup links, or greeting + logout
 export default function AccountMenu() {
   const router = useRouter();
+  const { t } = useI18n();
   const [account, setAccount] = useState<Account | null>(null);
   const [ready, setReady] = useState(false);
 
@@ -75,16 +77,16 @@ export default function AccountMenu() {
           href="/masuk"
           className="rounded-lg px-3 py-1.5 text-sm font-medium text-stone-600 outline-none transition hover:text-stone-900 focus-visible:ring-2 focus-visible:ring-brand-500 dark:text-stone-300 dark:hover:text-stone-50"
         >
-          Masuk
+          {t.account.login}
         </Link>
         <Link href="/daftar" className={buttonClass("primary", "sm")}>
-          Daftar
+          {t.account.signup}
         </Link>
       </div>
     );
   }
 
-  const firstName = account.name.trim().split(/\s+/)[0] || "kamu";
+  const firstName = account.name.trim().split(/\s+/)[0] || t.account.you;
 
   return (
     <div className="flex items-center gap-1.5">
@@ -93,24 +95,24 @@ export default function AccountMenu() {
           href="/admin"
           className="hidden rounded-lg px-2.5 py-1.5 text-sm font-semibold text-brand-700 outline-none transition hover:bg-brand-50 focus-visible:ring-2 focus-visible:ring-brand-500 sm:inline dark:text-brand-300 dark:hover:bg-brand-950/40"
         >
-          Dashboard
+          {t.account.dashboard}
         </Link>
       )}
       <Link
         href="/pesanan"
         className="hidden rounded-lg px-2.5 py-1.5 text-sm font-medium text-stone-600 outline-none transition hover:text-stone-900 focus-visible:ring-2 focus-visible:ring-brand-500 sm:inline dark:text-stone-300 dark:hover:text-stone-50"
       >
-        Pesanan saya
+        {t.account.myOrders}
       </Link>
       <span className="hidden text-sm text-stone-600 sm:inline dark:text-stone-300">
-        Halo, <span className="font-medium">{firstName}</span>
+        {t.account.greeting}, <span className="font-medium">{firstName}</span>
       </span>
       <button
         type="button"
         onClick={handleLogout}
         className="rounded-lg px-3 py-1.5 text-sm font-medium text-stone-600 outline-none transition hover:text-red-600 focus-visible:ring-2 focus-visible:ring-brand-500 dark:text-stone-300 dark:hover:text-red-400"
       >
-        Keluar
+        {t.account.logout}
       </button>
     </div>
   );

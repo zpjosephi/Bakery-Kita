@@ -5,12 +5,15 @@ import { getCurrentUser } from "../../lib/auth";
 import { getAllOrders, statusBadge } from "../../lib/orders-view";
 import { formatRupiah } from "../../lib/products";
 import { buttonClass } from "../../components/ui";
+import { getDict, getLocale } from "../../lib/i18n/server";
 import { setFulfillment } from "../actions";
 
-export const metadata = { title: "Pesanan Masuk — Admin" };
+export async function generateMetadata() {
+  return { title: (await getDict()).meta.adminOrdersTitle };
+}
 
-function formatTanggal(iso: string): string {
-  return new Intl.DateTimeFormat("id-ID", {
+function formatTanggal(iso: string, locale: string): string {
+  return new Intl.DateTimeFormat(locale === "id" ? "id-ID" : "en-US", {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(iso));
@@ -22,7 +25,11 @@ export default async function AdminOrdersPage() {
   if (!user) redirect("/masuk");
   if (user.role !== "admin") redirect("/");
 
-  const orders = await getAllOrders();
+  const [orders, t, locale] = await Promise.all([
+    getAllOrders(),
+    getDict(),
+    getLocale(),
+  ]);
 
   return (
     <div className="min-h-screen">
@@ -31,14 +38,14 @@ export default async function AdminOrdersPage() {
         <div className="mb-6 flex items-center justify-between gap-3">
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
-              Pesanan Masuk
+              {t.adminOrders.title}
             </h1>
             <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
-              {orders.length} pesanan
+              {t.adminOrders.count(orders.length)}
             </p>
           </div>
           <Link href="/admin" className={buttonClass("secondary", "md")}>
-            ← Kelola produk
+            {t.adminOrders.backToProducts}
           </Link>
         </div>
 
@@ -46,13 +53,13 @@ export default async function AdminOrdersPage() {
           <div className="rounded-2xl border border-stone-200 py-20 text-center dark:border-stone-800">
             <p className="text-5xl">📭</p>
             <p className="mt-4 text-stone-500 dark:text-stone-400">
-              Belum ada pesanan masuk.
+              {t.adminOrders.empty}
             </p>
           </div>
         ) : (
           <ul className="space-y-4">
             {orders.map((o) => {
-              const badge = statusBadge(o);
+              const badge = statusBadge(o, t.orderStatus);
               const paid = o.status === "LUNAS";
               return (
                 <li
@@ -65,7 +72,7 @@ export default async function AdminOrdersPage() {
                         {o.customer?.nama ?? "—"}
                       </p>
                       <p className="text-xs text-stone-400">
-                        {o.customer?.hp} · {formatTanggal(o.createdAt)}
+                        {o.customer?.hp} · {formatTanggal(o.createdAt, locale)}
                       </p>
                     </div>
                     <span
@@ -105,7 +112,7 @@ export default async function AdminOrdersPage() {
                           <input type="hidden" name="orderId" value={o.orderId} />
                           <input type="hidden" name="fulfillment" value="selesai" />
                           <button type="submit" className={buttonClass("primary", "sm")}>
-                            ✓ Tandai selesai
+                            {t.adminOrders.markDone}
                           </button>
                         </form>
                       ) : (
@@ -113,7 +120,7 @@ export default async function AdminOrdersPage() {
                           <input type="hidden" name="orderId" value={o.orderId} />
                           <input type="hidden" name="fulfillment" value="diproses" />
                           <button type="submit" className={buttonClass("ghost", "sm")}>
-                            ↺ Kembalikan ke proses
+                            {t.adminOrders.returnToProcess}
                           </button>
                         </form>
                       ))}

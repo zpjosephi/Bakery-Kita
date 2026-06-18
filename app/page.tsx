@@ -1,12 +1,13 @@
 import { formatRupiah } from "./lib/products";
 import { getProducts } from "./lib/products-data";
+import { getDict } from "./lib/i18n/server";
 import ProductCartControl from "./components/product-cart-control";
 import ProductThumb from "./components/product-thumb";
 import SiteHeader from "./components/site-header";
 
 // CATALOG (home page)
 export default async function CatalogPage() {
-  const products = await getProducts();
+  const [products, t] = await Promise.all([getProducts(), getDict()]);
 
   return (
     <div className="min-h-screen">
@@ -15,23 +16,23 @@ export default async function CatalogPage() {
       <main className="mx-auto max-w-5xl px-6">
         <section className="py-14 sm:py-20">
           <p className="text-sm font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
-            Fresh tiap pagi
+            {t.catalog.freshLabel}
           </p>
           <h1 className="mt-3 max-w-2xl text-4xl font-bold leading-tight tracking-tight text-stone-900 sm:text-5xl dark:text-stone-50">
-            Roti & kue rumahan, fresh tiap pagi.
+            {t.catalog.heroTitle}
           </h1>
           <p className="mt-4 max-w-xl text-lg text-stone-500 dark:text-stone-400">
-            Tinggal pilih, scan, beres. Bayar lewat QRIS.
+            {t.catalog.heroSubtitle}
           </p>
         </section>
 
         <section className="pb-20">
           <div className="mb-6 flex items-baseline justify-between border-b border-stone-200/70 pb-3 dark:border-stone-800">
             <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-50">
-              Menu
+              {t.catalog.menu}
             </h2>
             <span className="text-sm text-stone-400">
-              {products.length} produk
+              {t.catalog.productCount(products.length)}
             </span>
           </div>
 

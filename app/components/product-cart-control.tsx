@@ -1,9 +1,11 @@
 "use client";
 
 import { useCart } from "../lib/cart";
+import { useI18n } from "../lib/i18n/context";
 
 export default function ProductCartControl({ id }: { id: string }) {
   const { items, add, setQty, hydrated } = useCart();
+  const { t } = useI18n();
   const qty = items.find((i) => i.product.id === id)?.qty ?? 0;
 
   if (!hydrated || qty === 0) {
@@ -13,7 +15,7 @@ export default function ProductCartControl({ id }: { id: string }) {
         onClick={() => add(id, 1)}
         className="inline-flex h-10 w-32 items-center justify-center gap-1.5 rounded-full bg-brand-600 text-sm font-medium text-white shadow-sm outline-none transition hover:bg-brand-700 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.98]"
       >
-        <span className="text-base leading-none">+</span> Keranjang
+        <span className="text-base leading-none">+</span> {t.cart.add}
       </button>
     );
   }
@@ -24,7 +26,7 @@ export default function ProductCartControl({ id }: { id: string }) {
         type="button"
         onClick={() => setQty(id, qty - 1)}
         className="grid h-8 w-8 place-items-center rounded-full text-lg leading-none text-stone-700 outline-none transition hover:bg-stone-100 focus-visible:ring-2 focus-visible:ring-brand-500 dark:text-stone-200 dark:hover:bg-stone-800"
-        aria-label="Kurangi jumlah"
+        aria-label={t.cart.decrease}
       >
         −
       </button>
@@ -35,7 +37,7 @@ export default function ProductCartControl({ id }: { id: string }) {
         type="button"
         onClick={() => setQty(id, qty + 1)}
         className="grid h-8 w-8 place-items-center rounded-full text-lg leading-none text-stone-700 outline-none transition hover:bg-stone-100 focus-visible:ring-2 focus-visible:ring-brand-500 dark:text-stone-200 dark:hover:bg-stone-800"
-        aria-label="Tambah jumlah"
+        aria-label={t.cart.increase}
       >
         +
       </button>

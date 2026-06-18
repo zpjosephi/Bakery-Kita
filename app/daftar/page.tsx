@@ -3,8 +3,11 @@ import SiteHeader from "../components/site-header";
 import AuthForm from "../components/auth-form";
 import { signup } from "../auth/actions";
 import { getCurrentUser } from "../lib/auth";
+import { getDict } from "../lib/i18n/server";
 
-export const metadata = { title: "Daftar — Bakery Kita" };
+export async function generateMetadata() {
+  return { title: (await getDict()).meta.signupTitle };
+}
 
 // SIGN UP PAGE
 export default async function SignupPage() {

@@ -4,9 +4,12 @@ import SiteHeader from "../components/site-header";
 import { getCurrentUser } from "../lib/auth";
 import { getAllProducts } from "../lib/products-data";
 import { buttonClass } from "../components/ui";
+import { getDict } from "../lib/i18n/server";
 import AdminProducts from "./admin-products";
 
-export const metadata = { title: "Dashboard Admin — Bakery Kita" };
+export async function generateMetadata() {
+  return { title: (await getDict()).meta.adminTitle };
+}
 
 // ADMIN — manage products
 export default async function AdminPage() {
@@ -14,7 +17,7 @@ export default async function AdminPage() {
   if (!user) redirect("/masuk");
   if (user.role !== "admin") redirect("/");
 
-  const products = await getAllProducts();
+  const [products, t] = await Promise.all([getAllProducts(), getDict()]);
 
   return (
     <div className="min-h-screen">
@@ -23,18 +26,17 @@ export default async function AdminPage() {
         <div className="mb-6 flex items-start justify-between gap-3">
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
-              Kelola Produk
+              {t.admin.title}
             </h1>
             <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
-              Tambah, ubah harga, atau hapus produk. Perubahan langsung tampil di
-              katalog.
+              {t.admin.subtitle}
             </p>
           </div>
           <Link
             href="/admin/pesanan"
             className={`shrink-0 ${buttonClass("secondary", "md")}`}
           >
-            📦 Pesanan masuk
+            {t.admin.incomingOrders}
           </Link>
         </div>
 

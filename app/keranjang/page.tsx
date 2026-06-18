@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useCart } from "../lib/cart";
 import { formatRupiah } from "../lib/products";
+import { useI18n } from "../lib/i18n/context";
 import ProductThumb from "../components/product-thumb";
 import SiteHeader from "../components/site-header";
 import Steps from "../components/steps";
@@ -13,16 +14,17 @@ import { buttonClass } from "../components/ui";
 export default function CartPage() {
   const { items, totalItems, totalPrice, setQty, remove, clear, hydrated } =
     useCart();
+  const { t } = useI18n();
   const [confirmClear, setConfirmClear] = useState(false);
 
   return (
     <div className="min-h-screen">
-      <SiteHeader back={{ href: "/", label: "← Lanjut belanja" }} />
+      <SiteHeader back={{ href: "/", label: t.header.continueShopping }} />
 
       <main className="mx-auto max-w-3xl px-6 py-10">
         <Steps current={0} />
         <h1 className="mb-6 text-2xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
-          Keranjang
+          {t.cartPage.title}
         </h1>
 
         {!hydrated ? (
@@ -44,10 +46,10 @@ export default function CartPage() {
           <div className="rounded-2xl border border-stone-200 py-20 text-center dark:border-stone-800">
             <p className="text-5xl">🥐</p>
             <p className="mt-4 text-stone-500 dark:text-stone-400">
-              Keranjangmu masih kosong. Yuk, intip menunya dulu.
+              {t.cartPage.empty}
             </p>
             <Link href="/" className={`mt-6 ${buttonClass("primary", "md")}`}>
-              Lihat menu
+              {t.cartPage.viewMenu}
             </Link>
           </div>
         ) : (
@@ -77,7 +79,7 @@ export default function CartPage() {
                       onClick={() => remove(product.id)}
                       className="mt-1 rounded text-xs text-stone-400 outline-none transition hover:text-red-500 focus-visible:ring-2 focus-visible:ring-brand-500"
                     >
-                      Hapus
+                      {t.cartPage.remove}
                     </button>
                   </div>
 
@@ -86,7 +88,7 @@ export default function CartPage() {
                       type="button"
                       onClick={() => setQty(product.id, qty - 1)}
                       className="grid h-8 w-8 place-items-center rounded-full text-lg leading-none text-stone-700 outline-none transition hover:bg-stone-100 focus-visible:ring-2 focus-visible:ring-brand-500 dark:text-stone-200 dark:hover:bg-stone-800"
-                      aria-label={`Kurangi ${product.name}`}
+                      aria-label={t.cartPage.decreaseOf(product.name)}
                     >
                       −
                     </button>
@@ -97,7 +99,7 @@ export default function CartPage() {
                       type="button"
                       onClick={() => setQty(product.id, qty + 1)}
                       className="grid h-8 w-8 place-items-center rounded-full text-lg leading-none text-stone-700 outline-none transition hover:bg-stone-100 focus-visible:ring-2 focus-visible:ring-brand-500 dark:text-stone-200 dark:hover:bg-stone-800"
-                      aria-label={`Tambah ${product.name}`}
+                      aria-label={t.cartPage.increaseOf(product.name)}
                     >
                       +
                     </button>
@@ -112,11 +114,13 @@ export default function CartPage() {
 
             <div className="mt-6 rounded-2xl border border-stone-200 bg-white p-5 dark:border-stone-800 dark:bg-stone-900/40">
               <div className="flex items-center justify-between text-sm text-stone-500">
-                <span>Total item</span>
-                <span>{totalItems} pcs</span>
+                <span>{t.cartPage.totalItems}</span>
+                <span>
+                  {totalItems} {t.cartPage.pcs}
+                </span>
               </div>
               <div className="mt-2 flex items-center justify-between text-lg font-bold text-stone-900 dark:text-stone-50">
-                <span>Total belanja</span>
+                <span>{t.cartPage.orderTotal}</span>
                 <span className="tabular-nums">{formatRupiah(totalPrice)}</span>
               </div>
 
@@ -125,12 +129,14 @@ export default function CartPage() {
                   href="/checkout"
                   className={`flex-1 ${buttonClass("primary", "lg")}`}
                 >
-                  Lanjut ke Checkout →
+                  {t.cartPage.checkout}
                 </Link>
 
                 {confirmClear ? (
                   <div className="flex items-center gap-2 text-sm">
-                    <span className="text-stone-500">Yakin kosongkan?</span>
+                    <span className="text-stone-500">
+                      {t.cartPage.confirmClear}
+                    </span>
                     <button
                       type="button"
                       onClick={() => {
@@ -139,14 +145,14 @@ export default function CartPage() {
                       }}
                       className="rounded-full px-3 py-1.5 font-medium text-red-600 outline-none transition hover:bg-red-50 focus-visible:ring-2 focus-visible:ring-brand-500 dark:hover:bg-red-950/40"
                     >
-                      Ya, hapus
+                      {t.cartPage.yesClear}
                     </button>
                     <button
                       type="button"
                       onClick={() => setConfirmClear(false)}
                       className="rounded-full px-3 py-1.5 font-medium text-stone-600 outline-none transition hover:bg-stone-100 focus-visible:ring-2 focus-visible:ring-brand-500 dark:text-stone-300 dark:hover:bg-stone-800"
                     >
-                      Batal
+                      {t.cartPage.cancel}
                     </button>
                   </div>
                 ) : (
@@ -155,7 +161,7 @@ export default function CartPage() {
                     onClick={() => setConfirmClear(true)}
                     className={buttonClass("ghost", "lg")}
                   >
-                    Kosongkan
+                    {t.cartPage.clear}
                   </button>
                 )}
               </div>

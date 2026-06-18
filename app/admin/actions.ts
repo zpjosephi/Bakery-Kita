@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "../lib/supabase/server";
 import { isAdmin } from "../lib/auth";
+import { getDict } from "../lib/i18n/server";
 
 export type AdminState = { error?: string; ok?: string } | undefined;
 
@@ -24,7 +25,8 @@ export async function saveProduct(
   _prev: AdminState,
   formData: FormData,
 ): Promise<AdminState> {
-  if (!(await isAdmin())) return { error: "Akses ditolak — khusus admin." };
+  const t = await getDict();
+  if (!(await isAdmin())) return { error: t.admin.accessDenied };
 
   const id = String(formData.get("id") ?? "").trim();
   const name = String(formData.get("name") ?? "").trim();
@@ -35,8 +37,8 @@ export async function saveProduct(
   const sortOrder = Math.round(Number(formData.get("sort_order") ?? 0)) || 0;
   const isActive = formData.get("is_active") === "on";
 
-  if (name.length < 2) return { error: "Nama produk minimal 2 karakter." };
-  if (price === null) return { error: "Harga harus berupa angka (≥ 0)." };
+  if (name.length < 2) return { error: t.admin.nameMin };
+  if (price === null) return { error: t.admin.priceNumber };
 
   const supabase = await createClient();
   const fields = {
@@ -62,16 +64,13 @@ export async function saveProduct(
       .insert({ id: newId, ...fields });
     if (error)
       return {
-        error:
-          error.code === "23505"
-            ? "Sudah ada produk dengan nama serupa — ganti namanya."
-            : error.message,
+        error: error.code === "23505" ? t.admin.duplicateName : error.message,
       };
   }
 
   revalidatePath("/admin");
   revalidatePath("/");
-  return { ok: id ? "Perubahan tersimpan." : `Produk "${name}" ditambahkan.` };
+  return { ok: id ? t.admin.saved : t.admin.added(name) };
 }
 
 // DELETE PRODUCT

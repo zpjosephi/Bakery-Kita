@@ -11,6 +11,7 @@ import {
 } from "react";
 import { type Product } from "./products";
 import { useProducts } from "./products-context";
+import { useI18n } from "./i18n/context";
 
 export type CartLine = { id: string; qty: number };
 export type CartDetail = { product: Product; qty: number; subtotal: number };
@@ -33,6 +34,7 @@ const STORAGE_KEY = "bakery-cart-v1";
 // cart state, persisted to localStorage
 export function CartProvider({ children }: { children: ReactNode }) {
   const { byId } = useProducts();
+  const { t } = useI18n();
   const [lines, setLines] = useState<CartLine[]>([]);
   const [hydrated, setHydrated] = useState(false);
   const [toast, setToast] = useState<{ id: number; text: string } | null>(null);
@@ -60,7 +62,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       return [...prev, { id, qty }];
     });
     const name = byId(id)?.name;
-    if (name) setToast({ id: ++toastSeq.current, text: `${name} masuk keranjang` });
+    if (name) setToast({ id: ++toastSeq.current, text: t.cart.added(name) });
   }
 
   function setQty(id: string, qty: number) {
@@ -92,7 +94,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const totalPrice = items.reduce((sum, d) => sum + d.subtotal, 0);
 
     return { hydrated, items, totalItems, totalPrice, add, setQty, remove, clear, toast };
-  }, [lines, hydrated, toast, byId]);
+  }, [lines, hydrated, toast, byId, t]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

@@ -3,6 +3,7 @@
 import { useActionState, useState } from "react";
 import Link from "next/link";
 import { createClient } from "../lib/supabase/client";
+import { useI18n } from "../lib/i18n/context";
 import { buttonClass } from "./ui";
 import type { AuthState } from "../auth/actions";
 
@@ -17,6 +18,7 @@ export default function AuthForm({
   const [state, formAction, pending] = useActionState(action, undefined);
   const [googleError, setGoogleError] = useState("");
   const [googleLoading, setGoogleLoading] = useState(false);
+  const { t } = useI18n();
   const isSignup = mode === "signup";
 
   async function handleGoogle() {
@@ -31,7 +33,7 @@ export default function AuthForm({
       setGoogleLoading(false);
       setGoogleError(
         /provider|not enabled|unsupported/i.test(error.message)
-          ? "Login Google belum diaktifkan."
+          ? t.auth.googleNotEnabled
           : error.message,
       );
     }
@@ -40,15 +42,15 @@ export default function AuthForm({
   return (
     <div className="rounded-2xl border border-stone-200 bg-white p-6 sm:p-8 dark:border-stone-800 dark:bg-stone-900/40">
       <h1 className="text-2xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
-        {isSignup ? "Buat akun" : "Masuk"}
+        {isSignup ? t.auth.createAccount : t.auth.login}
       </h1>
       <p className="mt-1.5 text-sm text-stone-500 dark:text-stone-400">
-        {isSignup ? "Sudah punya akun? " : "Belum punya akun? "}
+        {isSignup ? t.auth.haveAccount : t.auth.noAccount}
         <Link
           href={isSignup ? "/masuk" : "/daftar"}
           className="font-medium text-brand-700 underline-offset-2 hover:underline dark:text-brand-300"
         >
-          {isSignup ? "Masuk di sini" : "Daftar di sini"}
+          {isSignup ? t.auth.loginHere : t.auth.signupHere}
         </Link>
       </p>
 
@@ -59,7 +61,7 @@ export default function AuthForm({
         className={`mt-6 w-full gap-2.5 ${buttonClass("secondary", "lg")}`}
       >
         <GoogleIcon />
-        {googleLoading ? "Mengalihkan…" : "Lanjut dengan Google"}
+        {googleLoading ? t.auth.redirecting : t.auth.continueGoogle}
       </button>
       {googleError && (
         <p role="alert" className="mt-2 text-xs text-red-500">
@@ -69,31 +71,31 @@ export default function AuthForm({
 
       <div className="my-5 flex items-center gap-3 text-xs text-stone-400">
         <span className="h-px flex-1 bg-stone-200 dark:bg-stone-800" />
-        atau pakai email
+        {t.auth.orEmail}
         <span className="h-px flex-1 bg-stone-200 dark:bg-stone-800" />
       </div>
 
       <form action={formAction} noValidate className="space-y-4">
         {isSignup && (
           <Field
-            label="Nama lengkap"
+            label={t.auth.fullName}
             name="name"
-            placeholder="mis. Budi Santoso"
+            placeholder={t.auth.namePlaceholder}
             autoComplete="name"
           />
         )}
         <Field
-          label="Email"
+          label={t.auth.email}
           name="email"
           type="email"
-          placeholder="kamu@email.com"
+          placeholder={t.auth.emailPlaceholder}
           autoComplete="email"
         />
         <Field
-          label="Password"
+          label={t.auth.password}
           name="password"
           type="password"
-          placeholder={isSignup ? "Minimal 6 karakter" : "••••••••"}
+          placeholder={isSignup ? t.auth.pwSignupPlaceholder : "••••••••"}
           autoComplete={isSignup ? "new-password" : "current-password"}
         />
 
@@ -119,7 +121,11 @@ export default function AuthForm({
           disabled={pending}
           className={`w-full ${buttonClass("primary", "lg")}`}
         >
-          {pending ? "Memproses…" : isSignup ? "Daftar" : "Masuk"}
+          {pending
+            ? t.auth.processing
+            : isSignup
+              ? t.account.signup
+              : t.auth.login}
         </button>
       </form>
     </div>

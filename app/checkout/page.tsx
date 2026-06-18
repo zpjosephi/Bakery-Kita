@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "../lib/cart";
 import { formatRupiah } from "../lib/products";
+import { useI18n } from "../lib/i18n/context";
 import ProductThumb from "../components/product-thumb";
 import SiteHeader from "../components/site-header";
 import Steps from "../components/steps";
@@ -16,6 +17,7 @@ type Customer = { nama: string; hp: string; alamat: string };
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, totalItems, totalPrice, hydrated, clear } = useCart();
+  const { t } = useI18n();
   const [form, setForm] = useState<Customer>({ nama: "", hp: "", alamat: "" });
   const [errors, setErrors] = useState<Partial<Customer>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -28,10 +30,10 @@ export default function CheckoutPage() {
 
   function validate(): boolean {
     const next: Partial<Customer> = {};
-    if (form.nama.trim().length < 2) next.nama = "Nama wajib diisi.";
+    if (form.nama.trim().length < 2) next.nama = t.checkout.errName;
     if (!/^(\+62|0)\d{8,14}$/.test(form.hp.replace(/[\s-]/g, "")))
-      next.hp = "No. HP tidak valid (contoh: 08123456789).";
-    if (form.alamat.trim().length < 5) next.alamat = "Alamat wajib diisi.";
+      next.hp = t.checkout.errPhone;
+    if (form.alamat.trim().length < 5) next.alamat = t.checkout.errAddress;
     setErrors(next);
     return Object.keys(next).length === 0;
   }
@@ -52,12 +54,12 @@ export default function CheckoutPage() {
         }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Gagal memproses pembayaran.");
+      if (!res.ok) throw new Error(data.error ?? t.checkout.payFailed);
 
       clear();
       router.push(`/bayar/${data.orderId}`);
     } catch (err) {
-      setApiError(err instanceof Error ? err.message : "Terjadi kesalahan.");
+      setApiError(err instanceof Error ? err.message : t.checkout.unexpected);
       setSubmitting(false);
     }
   }
@@ -69,10 +71,10 @@ export default function CheckoutPage() {
         <main className="mx-auto max-w-2xl px-6 py-20 text-center">
           <p className="text-5xl">🛒</p>
           <p className="mt-4 text-stone-500 dark:text-stone-400">
-            Keranjangmu masih kosong, jadi belum ada yang dibayar.
+            {t.checkout.emptyMsg}
           </p>
           <Link href="/" className={`mt-6 ${buttonClass("primary", "md")}`}>
-            Lihat menu
+            {t.checkout.viewMenu}
           </Link>
         </main>
       </div>
@@ -81,12 +83,12 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen">
-      <SiteHeader back={{ href: "/keranjang", label: "← Kembali ke keranjang" }} />
+      <SiteHeader back={{ href: "/keranjang", label: t.header.backToCart }} />
 
       <main className="mx-auto max-w-3xl px-6 py-10">
         <Steps current={1} />
         <h1 className="mb-6 text-2xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
-          Checkout
+          {t.checkout.title}
         </h1>
 
         <div className="grid gap-6 md:grid-cols-5">
@@ -96,32 +98,32 @@ export default function CheckoutPage() {
             noValidate
           >
             <h2 className="mb-4 font-semibold text-stone-900 dark:text-stone-50">
-              Data Pembeli
+              {t.checkout.buyerData}
             </h2>
 
             <Field
-              label="Nama lengkap"
+              label={t.checkout.fullName}
               value={form.nama}
               onChange={(v) => update("nama", v)}
               error={errors.nama}
-              placeholder="mis. Budi Santoso"
+              placeholder={t.checkout.namePlaceholder}
               autoComplete="name"
             />
             <Field
-              label="No. HP / WhatsApp"
+              label={t.checkout.phone}
               value={form.hp}
               onChange={(v) => update("hp", v)}
               error={errors.hp}
-              placeholder="mis. 08123456789"
+              placeholder={t.checkout.phonePlaceholder}
               inputMode="tel"
               autoComplete="tel"
             />
             <Field
-              label="Alamat pengiriman"
+              label={t.checkout.address}
               value={form.alamat}
               onChange={(v) => update("alamat", v)}
               error={errors.alamat}
-              placeholder="Jl. ... No. ..., Kota"
+              placeholder={t.checkout.addressPlaceholder}
               autoComplete="street-address"
               textarea
             />
@@ -142,20 +144,20 @@ export default function CheckoutPage() {
             >
               {submitting ? (
                 <>
-                  <Spinner /> Membuat QRIS…
+                  <Spinner /> {t.checkout.creatingQris}
                 </>
               ) : (
-                "Bayar dengan QRIS"
+                t.checkout.payWithQris
               )}
             </button>
             <p className="mt-3 text-center text-xs text-stone-400">
-              Mode latihan — pakai QRIS sandbox, nggak ada uang beneran terpotong.
+              {t.checkout.practiceNote}
             </p>
           </form>
 
           <aside className="h-fit rounded-2xl border border-stone-200 bg-white p-6 md:col-span-2 dark:border-stone-800 dark:bg-stone-900/40">
             <h2 className="mb-4 font-semibold text-stone-900 dark:text-stone-50">
-              Ringkasan
+              {t.checkout.summary}
             </h2>
             <div className="space-y-3">
               {items.map(({ product, qty, subtotal }) => (
@@ -182,7 +184,7 @@ export default function CheckoutPage() {
               ))}
             </div>
             <div className="mt-4 flex justify-between border-t border-stone-100 pt-4 font-bold dark:border-stone-800">
-              <span>Total ({totalItems} pcs)</span>
+              <span>{t.checkout.totalN(totalItems)}</span>
               <span className="tabular-nums text-brand-700 dark:text-brand-300">
                 {formatRupiah(totalPrice)}
               </span>

@@ -1,6 +1,8 @@
 import { cache } from "react";
 import { createClient } from "./supabase/server";
+import { getDict } from "./i18n/server";
 import type { OrderStatus, OrderItem } from "./orders";
+import type { Dict } from "./i18n/dictionaries";
 
 export type OrderFulfillment = "diproses" | "selesai";
 
@@ -49,7 +51,8 @@ export const getMyOrders = cache(async (): Promise<OrderView[]> => {
     .select("order_id, amount, status, fulfillment, items, created_at")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
-  if (error) throw new Error(`Gagal memuat pesanan: ${error.message}`);
+  if (error)
+    throw new Error((await getDict()).ordersLoadError(error.message));
   return (data ?? []).map((r) => toView(r as Row));
 });
 
@@ -60,15 +63,16 @@ export const getAllOrders = cache(async (): Promise<OrderView[]> => {
     .from("orders")
     .select("order_id, amount, status, fulfillment, customer, items, created_at")
     .order("created_at", { ascending: false });
-  if (error) throw new Error(`Gagal memuat pesanan: ${error.message}`);
+  if (error)
+    throw new Error((await getDict()).ordersLoadError(error.message));
   return (data ?? []).map((r) => toView(r as Row));
 });
 
 // STATUS BADGE (label + color)
-export function statusBadge(o: Pick<OrderView, "status" | "fulfillment">): {
-  label: string;
-  cls: string;
-} {
+export function statusBadge(
+  o: Pick<OrderView, "status" | "fulfillment">,
+  labels: Dict["orderStatus"],
+): { label: string; cls: string } {
   const tone = {
     amber: "bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300",
     blue: "bg-blue-100 text-blue-800 dark:bg-blue-950/40 dark:text-blue-300",
@@ -76,9 +80,11 @@ export function statusBadge(o: Pick<OrderView, "status" | "fulfillment">): {
     red: "bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-300",
     gray: "bg-stone-100 text-stone-600 dark:bg-stone-800 dark:text-stone-300",
   };
-  if (o.status === "PENDING") return { label: "Menunggu pembayaran", cls: tone.amber };
-  if (o.status === "GAGAL") return { label: "Pembayaran gagal", cls: tone.red };
-  if (o.status === "KEDALUWARSA") return { label: "Kedaluwarsa", cls: tone.gray };
-  if (o.fulfillment === "selesai") return { label: "Selesai", cls: tone.green };
-  return { label: "Sedang diproses", cls: tone.blue };
+  if (o.status === "PENDING") return { label: labels.pending, cls: tone.amber };
+  if (o.status === "GAGAL") return { label: labels.failed, cls: tone.red };
+  if (o.status === "KEDALUWARSA")
+    return { label: labels.expired, cls: tone.gray };
+  if (o.fulfillment === "selesai")
+    return { label: labels.done, cls: tone.green };
+  return { label: labels.processing, cls: tone.blue };
 }

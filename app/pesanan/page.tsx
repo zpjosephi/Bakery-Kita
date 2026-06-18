@@ -5,11 +5,14 @@ import { getCurrentUser } from "../lib/auth";
 import { getMyOrders, statusBadge } from "../lib/orders-view";
 import { formatRupiah } from "../lib/products";
 import { buttonClass } from "../components/ui";
+import { getDict, getLocale } from "../lib/i18n/server";
 
-export const metadata = { title: "Pesanan Saya — Bakery Kita" };
+export async function generateMetadata() {
+  return { title: (await getDict()).meta.myOrdersTitle };
+}
 
-function formatTanggal(iso: string): string {
-  return new Intl.DateTimeFormat("id-ID", {
+function formatTanggal(iso: string, locale: string): string {
+  return new Intl.DateTimeFormat(locale === "id" ? "id-ID" : "en-US", {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(iso));
@@ -20,30 +23,34 @@ export default async function MyOrdersPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/masuk");
 
-  const orders = await getMyOrders();
+  const [orders, t, locale] = await Promise.all([
+    getMyOrders(),
+    getDict(),
+    getLocale(),
+  ]);
 
   return (
     <div className="min-h-screen">
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-6 py-10">
         <h1 className="mb-6 text-2xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
-          Pesanan Saya
+          {t.orders.title}
         </h1>
 
         {orders.length === 0 ? (
           <div className="rounded-2xl border border-stone-200 py-20 text-center dark:border-stone-800">
             <p className="text-5xl">🧾</p>
             <p className="mt-4 text-stone-500 dark:text-stone-400">
-              Belum ada pesanan. Yuk, pesan roti pertamamu!
+              {t.orders.empty}
             </p>
             <Link href="/" className={`mt-6 ${buttonClass("primary", "md")}`}>
-              Lihat menu
+              {t.orders.viewMenu}
             </Link>
           </div>
         ) : (
           <ul className="space-y-4">
             {orders.map((o) => {
-              const badge = statusBadge(o);
+              const badge = statusBadge(o, t.orderStatus);
               const totalItem = o.items.reduce((s, i) => s + i.qty, 0);
               return (
                 <li
@@ -52,7 +59,7 @@ export default async function MyOrdersPage() {
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="text-xs text-stone-400">
-                      {formatTanggal(o.createdAt)}
+                      {formatTanggal(o.createdAt, locale)}
                     </span>
                     <span
                       className={`rounded-full px-2.5 py-1 text-xs font-medium ${badge.cls}`}
@@ -76,7 +83,7 @@ export default async function MyOrdersPage() {
 
                   <div className="mt-3 flex items-center justify-between border-t border-stone-100 pt-3 dark:border-stone-800">
                     <span className="text-sm text-stone-500">
-                      Total {totalItem} item
+                      {t.orders.totalN(totalItem)}
                     </span>
                     <span className="font-bold tabular-nums text-brand-700 dark:text-brand-300">
                       {formatRupiah(o.amount)}
@@ -88,7 +95,7 @@ export default async function MyOrdersPage() {
                       href={`/bayar/${o.orderId}`}
                       className={`mt-4 w-full ${buttonClass("primary", "md")}`}
                     >
-                      Lanjutkan pembayaran →
+                      {t.orders.continuePayment}
                     </Link>
                   )}
                 </li>

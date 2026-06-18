@@ -3,8 +3,11 @@ import SiteHeader from "../components/site-header";
 import AuthForm from "../components/auth-form";
 import { login } from "../auth/actions";
 import { getCurrentUser } from "../lib/auth";
+import { getDict } from "../lib/i18n/server";
 
-export const metadata = { title: "Masuk — Bakery Kita" };
+export async function generateMetadata() {
+  return { title: (await getDict()).meta.loginTitle };
+}
 
 // LOGIN PAGE
 export default async function LoginPage() {

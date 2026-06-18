@@ -4,6 +4,7 @@ import { getProductById } from "../../lib/products-data";
 import { chargeQris } from "../../lib/midtrans";
 import { saveOrder, type OrderItem } from "../../lib/orders";
 import { getCurrentUser } from "../../lib/auth";
+import { getDict } from "../../lib/i18n/server";
 
 type ChargeBody = {
   customer?: { nama?: string; hp?: string; alamat?: string };
@@ -11,11 +12,13 @@ type ChargeBody = {
 };
 
 export async function POST(request: Request) {
+  const t = await getDict();
+
   let body: ChargeBody;
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: "Body bukan JSON valid." }, { status: 400 });
+    return NextResponse.json({ error: t.charge.invalidJson }, { status: 400 });
   }
 
   const { customer, items } = body;
@@ -26,13 +29,13 @@ export async function POST(request: Request) {
     !customer?.alamat?.trim()
   ) {
     return NextResponse.json(
-      { error: "Data pembeli tidak lengkap." },
+      { error: t.charge.incompleteBuyer },
       { status: 400 },
     );
   }
 
   if (!Array.isArray(items) || items.length === 0) {
-    return NextResponse.json({ error: "Keranjang kosong." }, { status: 400 });
+    return NextResponse.json({ error: t.charge.emptyCart }, { status: 400 });
   }
 
   const orderItems: OrderItem[] = [];
@@ -42,7 +45,7 @@ export async function POST(request: Request) {
     const qty = Math.floor(Number(line.qty));
     if (!product || !Number.isFinite(qty) || qty <= 0) {
       return NextResponse.json(
-        { error: `Item tidak valid: ${line.id}` },
+        { error: t.charge.invalidItem(line.id) },
         { status: 400 },
       );
     }
@@ -76,7 +79,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ orderId, amount });
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Gagal memproses pembayaran.";
+    const message = err instanceof Error ? err.message : t.charge.paymentFailed;
     return NextResponse.json({ error: message }, { status: 502 });
   }
 }

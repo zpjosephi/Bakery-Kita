@@ -1,12 +1,17 @@
-const STEPS = ["Keranjang", "Data Diri", "Pembayaran", "Selesai"];
+"use client";
+
+import { useI18n } from "../lib/i18n/context";
 
 export default function Steps({ current }: { current: number }) {
+  const { t } = useI18n();
+  const labels = t.steps;
+
   return (
     <ol className="mx-auto mb-10 flex max-w-xl items-start">
-      {STEPS.map((label, i) => {
+      {labels.map((label, i) => {
         const done = i < current;
         const active = i === current;
-        const last = i === STEPS.length - 1;
+        const last = i === labels.length - 1;
         return (
           <li
             key={label}
