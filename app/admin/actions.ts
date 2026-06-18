@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "../lib/supabase/server";
 import { isAdmin } from "../lib/auth";
 import { getDict } from "../lib/i18n/server";
+import { translateProduct } from "../lib/translate";
 
 export type AdminState = { error?: string; ok?: string } | undefined;
 
@@ -41,6 +42,16 @@ export async function saveProduct(
   if (price === null) return { error: t.admin.priceNumber };
 
   const supabase = await createClient();
+
+  // auto-translate into both languages; fall back to the typed text if the AI
+  // call is unavailable (no API key) or fails, so saving never breaks.
+  const tr = (await translateProduct({ name, description })) ?? {
+    name_en: name,
+    name_id: name,
+    description_en: description,
+    description_id: description,
+  };
+
   const fields = {
     name,
     description,
@@ -49,6 +60,7 @@ export async function saveProduct(
     price,
     sort_order: sortOrder,
     is_active: isActive,
+    ...tr,
   };
 
   if (id) {
@@ -100,4 +112,43 @@ export async function setFulfillment(formData: FormData): Promise<void> {
     .eq("order_id", orderId);
 
   revalidatePath("/admin/pesanan");
+}
+
+// RE-TRANSLATE ALL PRODUCTS (backfill existing rows after enabling AI)
+export async function translateAll(
+  _prev: AdminState,
+  _formData: FormData,
+): Promise<AdminState> {
+  const t = await getDict();
+  if (!(await isAdmin())) return { error: t.admin.accessDenied };
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("products")
+    .select("id, name, description");
+  if (error) return { error: error.message };
+
+  let count = 0;
+  for (const p of (data ?? []) as {
+    id: string;
+    name: string;
+    description: string;
+  }[]) {
+    const tr = await translateProduct({
+      name: p.name,
+      description: p.description ?? "",
+    });
+    if (!tr) continue;
+    const { error: upErr } = await supabase
+      .from("products")
+      .update(tr)
+      .eq("id", p.id);
+    if (!upErr) count++;
+  }
+
+  if (count === 0) return { error: t.admin.translateNone };
+
+  revalidatePath("/admin");
+  revalidatePath("/");
+  return { ok: t.admin.translatedN(count) };
 }

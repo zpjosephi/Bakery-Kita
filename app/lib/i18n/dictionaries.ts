@@ -185,6 +185,13 @@ const en = {
     closeForm: "Close form",
     addProduct: "+ Add product",
     addProductSubmit: "Add product",
+    langHint:
+      "Type in English or Indonesian — the other language is filled in automatically when you save.",
+    translateAll: "🌐 Translate existing",
+    translating: "Translating…",
+    translatedN: (n: number) => `Translated ${n} products.`,
+    translateNone:
+      "Nothing translated — check that the GEMINI_API_KEY is set.",
     productName: "Product name",
     productNamePlaceholder: "e.g. Banana Bread",
     price: "Price (Rp)",
@@ -432,6 +439,13 @@ const id: Dict = {
     closeForm: "Tutup form",
     addProduct: "+ Tambah produk",
     addProductSubmit: "Tambah produk",
+    langHint:
+      "Ketik pakai bahasa Indonesia atau Inggris — bahasa satunya diisi otomatis saat disimpan.",
+    translateAll: "🌐 Terjemahkan yang ada",
+    translating: "Menerjemahkan…",
+    translatedN: (n: number) => `${n} produk diterjemahkan.`,
+    translateNone:
+      "Tidak ada yang diterjemahkan — pastikan GEMINI_API_KEY sudah diset.",
     productName: "Nama produk",
     productNamePlaceholder: "mis. Roti Pisang",
     price: "Harga (Rp)",

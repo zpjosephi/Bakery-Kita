@@ -1,7 +1,12 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { saveProduct, deleteProduct, type AdminState } from "./actions";
+import {
+  saveProduct,
+  deleteProduct,
+  translateAll,
+  type AdminState,
+} from "./actions";
 import { formatRupiah } from "../lib/products";
 import { createClient } from "../lib/supabase/client";
 import { useI18n } from "../lib/i18n/context";
@@ -16,21 +21,54 @@ export default function AdminProducts({
 }) {
   const { t } = useI18n();
   const [showAdd, setShowAdd] = useState(false);
+  const [trState, trAction, trPending] = useActionState<AdminState, FormData>(
+    translateAll,
+    undefined,
+  );
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between gap-3">
+      <p className="rounded-lg bg-brand-50 px-3 py-2 text-xs text-brand-800 dark:bg-brand-950/40 dark:text-brand-200">
+        {t.admin.langHint}
+      </p>
+
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-stone-500">
           {t.admin.productCount(products.length)}
         </p>
-        <button
-          type="button"
-          onClick={() => setShowAdd((v) => !v)}
-          className={buttonClass(showAdd ? "ghost" : "primary", "md")}
-        >
-          {showAdd ? t.admin.closeForm : t.admin.addProduct}
-        </button>
+        <div className="flex items-center gap-2">
+          <form action={trAction}>
+            <button
+              type="submit"
+              disabled={trPending}
+              className={buttonClass("secondary", "md")}
+            >
+              {trPending ? t.admin.translating : t.admin.translateAll}
+            </button>
+          </form>
+          <button
+            type="button"
+            onClick={() => setShowAdd((v) => !v)}
+            className={buttonClass(showAdd ? "ghost" : "primary", "md")}
+          >
+            {showAdd ? t.admin.closeForm : t.admin.addProduct}
+          </button>
+        </div>
       </div>
+
+      {(trState?.ok || trState?.error) && (
+        <p
+          role="status"
+          className={
+            "rounded-lg p-2.5 text-sm " +
+            (trState.ok
+              ? "bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-300"
+              : "bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-300")
+          }
+        >
+          {trState.ok ?? trState.error}
+        </p>
+      )}
 
       {showAdd && <ProductCard product={null} />}
 
