@@ -37,8 +37,8 @@ const en = {
 
   catalog: {
     freshLabel: "Fresh every morning",
-    heroTitle: "Homemade bread & cakes, fresh every morning.",
-    heroSubtitle: "Pick, scan, done. Pay with QRIS.",
+    heroTitle: "Homemade bread & cakes, baked in small batches.",
+    heroSubtitle: "Pick what you like, scan, done — pay with QRIS.",
     menu: "Menu",
     productCount: (n: number) => `${n} products`,
   },
@@ -299,8 +299,8 @@ const id: Dict = {
 
   catalog: {
     freshLabel: "Fresh tiap pagi",
-    heroTitle: "Roti & kue rumahan, fresh tiap pagi.",
-    heroSubtitle: "Tinggal pilih, scan, beres. Bayar lewat QRIS.",
+    heroTitle: "Roti & kue rumahan, dipanggang dalam jumlah kecil.",
+    heroSubtitle: "Tinggal pilih, scan, beres — bayar lewat QRIS.",
     menu: "Menu",
     productCount: (n: number) => `${n} produk`,
   },
