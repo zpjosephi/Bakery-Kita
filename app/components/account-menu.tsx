@@ -2,16 +2,18 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "../lib/supabase/client";
 import { useI18n } from "../lib/i18n/context";
 import { buttonClass } from "./ui";
+import { User, LogOut } from "./icons";
 
 type Account = { name: string; role: "customer" | "admin" };
 
 // header account area — login/signup links, or greeting + logout
 export default function AccountMenu() {
   const router = useRouter();
+  const pathname = usePathname();
   const { t } = useI18n();
   const [account, setAccount] = useState<Account | null>(null);
   const [ready, setReady] = useState(false);
@@ -65,9 +67,7 @@ export default function AccountMenu() {
   }
 
   if (!ready) {
-    return (
-      <div className="h-8 w-20 animate-pulse rounded-full bg-stone-100 dark:bg-stone-800" />
-    );
+    return <div className="h-9 w-24 animate-pulse rounded-full bg-brand-100/60" />;
   }
 
   if (!account) {
@@ -75,7 +75,7 @@ export default function AccountMenu() {
       <div className="flex items-center gap-1.5">
         <Link
           href="/masuk"
-          className="rounded-lg px-3 py-1.5 text-sm font-medium text-stone-600 outline-none transition hover:text-stone-900 focus-visible:ring-2 focus-visible:ring-brand-500 dark:text-stone-300 dark:hover:text-stone-50"
+          className="rounded-lg px-3 py-1.5 text-sm font-medium text-muted outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-brand-500"
         >
           {t.account.login}
         </Link>
@@ -89,31 +89,54 @@ export default function AccountMenu() {
   const firstName = account.name.trim().split(/\s+/)[0] || t.account.you;
 
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="flex items-center gap-1">
       {account.role === "admin" && (
-        <Link
-          href="/admin"
-          className="hidden rounded-lg px-2.5 py-1.5 text-sm font-semibold text-brand-700 outline-none transition hover:bg-brand-50 focus-visible:ring-2 focus-visible:ring-brand-500 sm:inline dark:text-brand-300 dark:hover:bg-brand-950/40"
-        >
+        <NavLink href="/admin" active={pathname.startsWith("/admin")} accent>
           {t.account.dashboard}
-        </Link>
+        </NavLink>
       )}
-      <Link
-        href="/pesanan"
-        className="hidden rounded-lg px-2.5 py-1.5 text-sm font-medium text-stone-600 outline-none transition hover:text-stone-900 focus-visible:ring-2 focus-visible:ring-brand-500 sm:inline dark:text-stone-300 dark:hover:text-stone-50"
-      >
+      <NavLink href="/pesanan" active={pathname === "/pesanan"}>
         {t.account.myOrders}
-      </Link>
-      <span className="hidden text-sm text-stone-600 sm:inline dark:text-stone-300">
-        {t.account.greeting}, <span className="font-medium">{firstName}</span>
+      </NavLink>
+      <span className="hidden items-center gap-1.5 pl-1.5 pr-1 text-sm text-muted sm:inline-flex">
+        <User width={16} height={16} className="text-brand-600" />
+        <span className="font-medium text-foreground">{firstName}</span>
       </span>
       <button
         type="button"
         onClick={handleLogout}
-        className="rounded-lg px-3 py-1.5 text-sm font-medium text-stone-600 outline-none transition hover:text-red-600 focus-visible:ring-2 focus-visible:ring-brand-500 dark:text-stone-300 dark:hover:text-red-400"
+        aria-label={t.account.logout}
+        className="grid h-9 w-9 place-items-center rounded-lg text-muted outline-none transition-colors hover:bg-red-50 hover:text-red-600 focus-visible:ring-2 focus-visible:ring-brand-500"
       >
-        {t.account.logout}
+        <LogOut width={17} height={17} />
       </button>
     </div>
+  );
+}
+
+function NavLink({
+  href,
+  active,
+  accent,
+  children,
+}: {
+  href: string;
+  active: boolean;
+  accent?: boolean;
+  children: React.ReactNode;
+}) {
+  const base =
+    "hidden rounded-lg px-2.5 py-1.5 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand-500 sm:inline-block ";
+  const tone = accent
+    ? active
+      ? "bg-brand-100 font-semibold text-brand-800"
+      : "font-semibold text-brand-700 hover:bg-brand-50"
+    : active
+      ? "bg-brand-100/70 font-medium text-foreground"
+      : "font-medium text-muted hover:text-foreground";
+  return (
+    <Link href={href} aria-current={active ? "page" : undefined} className={base + tone}>
+      {children}
+    </Link>
   );
 }

@@ -4,7 +4,7 @@ import { useActionState, useState } from "react";
 import Link from "next/link";
 import { createClient } from "../lib/supabase/client";
 import { useI18n } from "../lib/i18n/context";
-import { buttonClass } from "./ui";
+import { buttonClass, cardClass } from "./ui";
 import type { AuthState } from "../auth/actions";
 
 // shared form for both login and signup
@@ -40,15 +40,15 @@ export default function AuthForm({
   }
 
   return (
-    <div className="rounded-2xl border border-stone-200 bg-white p-6 sm:p-8 dark:border-stone-800 dark:bg-stone-900/40">
-      <h1 className="text-2xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
+    <div className={cardClass("p-6 sm:p-8")}>
+      <h1 className="font-display text-3xl font-semibold text-foreground">
         {isSignup ? t.auth.createAccount : t.auth.login}
       </h1>
-      <p className="mt-1.5 text-sm text-stone-500 dark:text-stone-400">
+      <p className="mt-1.5 text-sm text-muted">
         {isSignup ? t.auth.haveAccount : t.auth.noAccount}
         <Link
           href={isSignup ? "/masuk" : "/daftar"}
-          className="font-medium text-brand-700 underline-offset-2 hover:underline dark:text-brand-300"
+          className="font-medium text-brand-700 underline-offset-2 hover:underline"
         >
           {isSignup ? t.auth.loginHere : t.auth.signupHere}
         </Link>
@@ -69,10 +69,10 @@ export default function AuthForm({
         </p>
       )}
 
-      <div className="my-5 flex items-center gap-3 text-xs text-stone-400">
-        <span className="h-px flex-1 bg-stone-200 dark:bg-stone-800" />
+      <div className="my-5 flex items-center gap-3 text-xs text-muted">
+        <span className="h-px flex-1 bg-border" />
         {t.auth.orEmail}
-        <span className="h-px flex-1 bg-stone-200 dark:bg-stone-800" />
+        <span className="h-px flex-1 bg-border" />
       </div>
 
       <form action={formAction} noValidate className="space-y-4">
@@ -102,7 +102,7 @@ export default function AuthForm({
         {state?.error && (
           <p
             role="alert"
-            className="rounded-lg bg-red-50 p-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300"
+            className="rounded-xl bg-red-50 p-3 text-sm text-red-700 ring-1 ring-inset ring-red-200"
           >
             {state.error}
           </p>
@@ -110,7 +110,7 @@ export default function AuthForm({
         {state?.message && (
           <p
             role="status"
-            className="rounded-lg bg-green-50 p-3 text-sm text-green-700 dark:bg-green-950/40 dark:text-green-300"
+            className="rounded-xl bg-green-50 p-3 text-sm text-green-700 ring-1 ring-inset ring-green-200"
           >
             {state.message}
           </p>
@@ -147,9 +147,7 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="text-sm font-medium text-stone-700 dark:text-stone-300">
-        {label}
-      </span>
+      <span className="text-sm font-medium text-foreground">{label}</span>
       <input
         name={name}
         type={type}
@@ -157,7 +155,7 @@ function Field({
         autoComplete={autoComplete}
         required
         minLength={type === "password" ? 6 : undefined}
-        className="mt-1.5 w-full rounded-lg border border-stone-300 bg-white px-3 py-2.5 text-sm text-stone-900 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-50"
+        className="mt-1.5 w-full rounded-xl border border-border bg-surface px-3.5 py-2.5 text-sm text-foreground outline-none transition-[border-color,box-shadow] focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
       />
     </label>
   );

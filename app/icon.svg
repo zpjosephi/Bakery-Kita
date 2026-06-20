@@ -1,11 +1,12 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="32" height="32" rx="8" fill="#a25c18"/>
-  <!-- bread loaf -->
-  <path d="M9 21 L9 16.5 C9 12.5 12 11 16 11 C20 11 23 12.5 23 16.5 L23 21 C23 21.6 22.6 22 22 22 L10 22 C9.4 22 9 21.6 9 21 Z" fill="#fbf5ec"/>
-  <!-- crust scoring -->
-  <g stroke="#a25c18" stroke-width="1.5" stroke-linecap="round">
-    <path d="M12.8 15.2 l2 4"/>
-    <path d="M15.9 14.4 l2 4"/>
-    <path d="M19 15.2 l2 4"/>
+  <rect width="32" height="32" rx="8" fill="#a1571a"/>
+  <g stroke="#fbf4e9" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M16 25V12"/>
+    <path d="M16 12c0-2.6 1.3-4.5 3.4-5.8C18.2 8 17.1 9.6 16 12Z" fill="#fbf4e9"/>
+    <path d="M16 12c0-2.6-1.3-4.5-3.4-5.8C13.8 8 14.9 9.6 16 12Z" fill="#fbf4e9"/>
+    <path d="M16 17.8c2.1-.9 3.4-2.7 3.8-5.2-2.1.8-3.4 2.7-3.8 5.2Z" fill="#fbf4e9"/>
+    <path d="M16 17.8c-2.1-.9-3.4-2.7-3.8-5.2 2.1.8 3.4 2.7 3.8 5.2Z" fill="#fbf4e9"/>
+    <path d="M16 23.5c2.1-.9 3.4-2.7 3.8-5.2-2.1.8-3.4 2.7-3.8 5.2Z" fill="#fbf4e9"/>
+    <path d="M16 23.5c-2.1-.9-3.4-2.7-3.8-5.2 2.1.8 3.4 2.7 3.8 5.2Z" fill="#fbf4e9"/>
   </g>
 </svg>

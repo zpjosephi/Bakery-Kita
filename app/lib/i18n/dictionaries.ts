@@ -12,8 +12,8 @@ const en = {
   brand: "Bakery Kita",
 
   header: {
-    continueShopping: "← Continue shopping",
-    backToCart: "← Back to cart",
+    continueShopping: "Continue shopping",
+    backToCart: "Back to cart",
   },
 
   account: {
@@ -55,7 +55,7 @@ const en = {
     totalItems: "Total items",
     pcs: "pcs",
     orderTotal: "Order total",
-    checkout: "Continue to checkout →",
+    checkout: "Continue to checkout",
     confirmClear: "Clear the cart?",
     yesClear: "Yes, clear",
     cancel: "Cancel",
@@ -96,7 +96,7 @@ const en = {
     qrAlt: "QRIS payment",
     creatingQr: "Creating QR…",
     waiting: "Waiting for payment…",
-    howToTitle: "🧪 How to pay (sandbox, fake money):",
+    howToTitle: "How to pay (sandbox · fake money)",
     step1: "Click “Copy QR image URL” below.",
     step2pre: "Open the simulator → paste into the ",
     step2field: "“QR Code Image Url”",
@@ -104,10 +104,10 @@ const en = {
     step3pre: "Click ",
     step3scan: "“Scan QR”",
     step3post: ", then confirm payment.",
-    step4: "This page turns “Paid” automatically. ✅",
-    copied: "Copied ✓",
+    step4: "This page updates to “Paid” automatically.",
+    copied: "Copied",
     copyUrl: "Copy QR image URL",
-    openSimulator: "Open QRIS Simulator ↗",
+    openSimulator: "Open QRIS Simulator",
     noQrUrl: "QR image URL not available from Midtrans.",
     successTitle: "Payment received!",
     successBody: (amount: string) =>
@@ -156,16 +156,16 @@ const en = {
     empty: "No orders yet. Order your first bread!",
     viewMenu: "View menu",
     totalN: (n: number) => `Total ${n} items`,
-    continuePayment: "Continue payment →",
+    continuePayment: "Continue payment",
   },
 
   adminOrders: {
     title: "Incoming Orders",
     count: (n: number) => `${n} orders`,
-    backToProducts: "← Manage products",
+    backToProducts: "Manage products",
     empty: "No incoming orders yet.",
-    markDone: "✓ Mark done",
-    returnToProcess: "↺ Return to processing",
+    markDone: "Mark done",
+    returnToProcess: "Return to processing",
   },
 
   orderStatus: {
@@ -180,14 +180,14 @@ const en = {
     title: "Manage Products",
     subtitle:
       "Add, change prices, or remove products. Changes show in the catalog instantly.",
-    incomingOrders: "📦 Incoming orders",
+    incomingOrders: "Incoming orders",
     productCount: (n: number) => `${n} products`,
     closeForm: "Close form",
-    addProduct: "+ Add product",
+    addProduct: "Add product",
     addProductSubmit: "Add product",
     langHint:
       "Type in English or Indonesian — the other language is filled in automatically when you save.",
-    translateAll: "🌐 Translate existing",
+    translateAll: "Translate existing",
     translating: "Translating…",
     translatedN: (n: number) => `Translated ${n} products.`,
     translateNone:
@@ -226,7 +226,7 @@ const en = {
   },
 
   footer: {
-    tagline: "— sample QRIS payment store (Midtrans Sandbox).",
+    tagline: "Sample QRIS checkout · Midtrans Sandbox",
     madeBy: "made by",
   },
 
@@ -253,6 +253,14 @@ const en = {
     myOrdersTitle: "My Orders — Bakery Kita",
     adminTitle: "Admin Dashboard — Bakery Kita",
     adminOrdersTitle: "Incoming Orders — Admin",
+    notFoundTitle: "Page not found — Bakery Kita",
+  },
+
+  notFound: {
+    code: "404",
+    title: "We couldn't find that page",
+    body: "It may have moved, or never came out of the oven. Let's get you back to the fresh stuff.",
+    back: "Back to menu",
   },
 
   language: {
@@ -266,8 +274,8 @@ const id: Dict = {
   brand: "Bakery Kita",
 
   header: {
-    continueShopping: "← Lanjut belanja",
-    backToCart: "← Kembali ke keranjang",
+    continueShopping: "Lanjut belanja",
+    backToCart: "Kembali ke keranjang",
   },
 
   account: {
@@ -309,7 +317,7 @@ const id: Dict = {
     totalItems: "Total item",
     pcs: "pcs",
     orderTotal: "Total belanja",
-    checkout: "Lanjut ke Checkout →",
+    checkout: "Lanjut ke Checkout",
     confirmClear: "Yakin kosongkan?",
     yesClear: "Ya, hapus",
     cancel: "Batal",
@@ -350,7 +358,7 @@ const id: Dict = {
     qrAlt: "QRIS pembayaran",
     creatingQr: "Membuat QR…",
     waiting: "Menunggu pembayaran…",
-    howToTitle: "🧪 Cara bayar (sandbox, uang palsu):",
+    howToTitle: "Cara bayar (sandbox · uang palsu)",
     step1: "Klik “Salin URL gambar QR” di bawah.",
     step2pre: "Buka simulator → tempel di kolom ",
     step2field: "“QR Code Image Url”",
@@ -358,10 +366,10 @@ const id: Dict = {
     step3pre: "Klik ",
     step3scan: "“Scan QR”",
     step3post: ", lalu konfirmasi bayar.",
-    step4: "Halaman ini otomatis jadi “Lunas”. ✅",
-    copied: "Tersalin ✓",
+    step4: "Halaman ini otomatis jadi “Lunas”.",
+    copied: "Tersalin",
     copyUrl: "Salin URL gambar QR",
-    openSimulator: "Buka QRIS Simulator ↗",
+    openSimulator: "Buka QRIS Simulator",
     noQrUrl: "URL gambar QR tidak tersedia dari Midtrans.",
     successTitle: "Pembayaran masuk!",
     successBody: (amount: string) =>
@@ -410,16 +418,16 @@ const id: Dict = {
     empty: "Belum ada pesanan. Yuk, pesan roti pertamamu!",
     viewMenu: "Lihat menu",
     totalN: (n: number) => `Total ${n} item`,
-    continuePayment: "Lanjutkan pembayaran →",
+    continuePayment: "Lanjutkan pembayaran",
   },
 
   adminOrders: {
     title: "Pesanan Masuk",
     count: (n: number) => `${n} pesanan`,
-    backToProducts: "← Kelola produk",
+    backToProducts: "Kelola produk",
     empty: "Belum ada pesanan masuk.",
-    markDone: "✓ Tandai selesai",
-    returnToProcess: "↺ Kembalikan ke proses",
+    markDone: "Tandai selesai",
+    returnToProcess: "Kembalikan ke proses",
   },
 
   orderStatus: {
@@ -434,14 +442,14 @@ const id: Dict = {
     title: "Kelola Produk",
     subtitle:
       "Tambah, ubah harga, atau hapus produk. Perubahan langsung tampil di katalog.",
-    incomingOrders: "📦 Pesanan masuk",
+    incomingOrders: "Pesanan masuk",
     productCount: (n: number) => `${n} produk`,
     closeForm: "Tutup form",
-    addProduct: "+ Tambah produk",
+    addProduct: "Tambah produk",
     addProductSubmit: "Tambah produk",
     langHint:
       "Ketik pakai bahasa Indonesia atau Inggris — bahasa satunya diisi otomatis saat disimpan.",
-    translateAll: "🌐 Terjemahkan yang ada",
+    translateAll: "Terjemahkan yang ada",
     translating: "Menerjemahkan…",
     translatedN: (n: number) => `${n} produk diterjemahkan.`,
     translateNone:
@@ -480,7 +488,7 @@ const id: Dict = {
   },
 
   footer: {
-    tagline: "— toko contoh pembayaran QRIS (Midtrans Sandbox).",
+    tagline: "Toko contoh pembayaran QRIS · Midtrans Sandbox",
     madeBy: "made by",
   },
 
@@ -507,6 +515,14 @@ const id: Dict = {
     myOrdersTitle: "Pesanan Saya — Bakery Kita",
     adminTitle: "Dashboard Admin — Bakery Kita",
     adminOrdersTitle: "Pesanan Masuk — Admin",
+    notFoundTitle: "Halaman tidak ditemukan — Bakery Kita",
+  },
+
+  notFound: {
+    code: "404",
+    title: "Halaman tidak ditemukan",
+    body: "Mungkin sudah dipindah, atau memang belum keluar dari oven. Yuk, balik ke yang fresh.",
+    back: "Kembali ke menu",
   },
 
   language: {

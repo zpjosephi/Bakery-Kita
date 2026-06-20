@@ -10,7 +10,8 @@ import {
 import { formatRupiah } from "../lib/products";
 import { createClient } from "../lib/supabase/client";
 import { useI18n } from "../lib/i18n/context";
-import { buttonClass } from "../components/ui";
+import { buttonClass, cardClass } from "../components/ui";
+import { Plus, Globe, Trash } from "../components/icons";
 import ProductThumb from "../components/product-thumb";
 import type { AdminProduct } from "../lib/products-data";
 
@@ -28,12 +29,12 @@ export default function AdminProducts({
 
   return (
     <div className="space-y-6">
-      <p className="rounded-lg bg-brand-50 px-3 py-2 text-xs text-brand-800 dark:bg-brand-950/40 dark:text-brand-200">
+      <p className="rounded-xl bg-brand-50/70 px-3.5 py-2.5 text-xs text-brand-800 ring-1 ring-inset ring-brand-100">
         {t.admin.langHint}
       </p>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-stone-500">
+        <p className="text-sm tabular-nums text-muted">
           {t.admin.productCount(products.length)}
         </p>
         <div className="flex items-center gap-2">
@@ -43,6 +44,7 @@ export default function AdminProducts({
               disabled={trPending}
               className={buttonClass("secondary", "md")}
             >
+              <Globe width={16} height={16} />
               {trPending ? t.admin.translating : t.admin.translateAll}
             </button>
           </form>
@@ -51,6 +53,7 @@ export default function AdminProducts({
             onClick={() => setShowAdd((v) => !v)}
             className={buttonClass(showAdd ? "ghost" : "primary", "md")}
           >
+            {!showAdd && <Plus width={17} height={17} />}
             {showAdd ? t.admin.closeForm : t.admin.addProduct}
           </button>
         </div>
@@ -60,10 +63,10 @@ export default function AdminProducts({
         <p
           role="status"
           className={
-            "rounded-lg p-2.5 text-sm " +
+            "rounded-xl p-2.5 text-sm ring-1 ring-inset " +
             (trState.ok
-              ? "bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-300"
-              : "bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-300")
+              ? "bg-green-50 text-green-700 ring-green-200"
+              : "bg-red-50 text-red-700 ring-red-200")
           }
         >
           {trState.ok ?? trState.error}
@@ -129,11 +132,9 @@ function ProductCard({ product }: { product: AdminProduct | null }) {
   return (
     <form
       action={action}
-      className={`rounded-2xl border bg-white p-5 dark:bg-stone-900/40 ${
-        isNew
-          ? "border-brand-300 dark:border-brand-800"
-          : "border-stone-200 dark:border-stone-800"
-      }`}
+      className={cardClass(
+        `p-5 ${isNew ? "border-brand-300 ring-1 ring-brand-200" : ""}`,
+      )}
     >
       {!isNew && <input type="hidden" name="id" value={product.id} />}
 
@@ -232,12 +233,12 @@ function ProductCard({ product }: { product: AdminProduct | null }) {
         </Field>
       </div>
 
-      <label className="mt-3 flex items-center gap-2 text-sm text-stone-700 dark:text-stone-300">
+      <label className="mt-3 flex items-center gap-2 text-sm text-foreground">
         <input
           type="checkbox"
           name="is_active"
           defaultChecked={product?.is_active ?? true}
-          className="h-4 w-4 rounded border-stone-300 accent-brand-600"
+          className="h-4 w-4 rounded border-border accent-brand-600"
         />
         {t.admin.showInCatalog}
       </label>
@@ -245,7 +246,7 @@ function ProductCard({ product }: { product: AdminProduct | null }) {
       {state?.error && (
         <p
           role="alert"
-          className="mt-3 rounded-lg bg-red-50 p-2.5 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300"
+          className="mt-3 rounded-xl bg-red-50 p-2.5 text-sm text-red-700 ring-1 ring-inset ring-red-200"
         >
           {state.error}
         </p>
@@ -253,7 +254,7 @@ function ProductCard({ product }: { product: AdminProduct | null }) {
       {state?.ok && (
         <p
           role="status"
-          className="mt-3 rounded-lg bg-green-50 p-2.5 text-sm text-green-700 dark:bg-green-950/40 dark:text-green-300"
+          className="mt-3 rounded-xl bg-green-50 p-2.5 text-sm text-green-700 ring-1 ring-inset ring-green-200"
         >
           {state.ok}
         </p>
@@ -287,6 +288,7 @@ function ProductCard({ product }: { product: AdminProduct | null }) {
               }}
               className={`ml-auto ${buttonClass("danger", "md")}`}
             >
+              <Trash width={16} height={16} />
               {t.admin.delete}
             </button>
           </>
@@ -297,7 +299,7 @@ function ProductCard({ product }: { product: AdminProduct | null }) {
 }
 
 const inputCls =
-  "mt-1 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-50";
+  "mt-1 w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm text-foreground outline-none transition-[border-color,box-shadow] focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20";
 
 function Field({
   label,
@@ -312,11 +314,9 @@ function Field({
 }) {
   return (
     <label className={`block ${className ?? ""}`}>
-      <span className="text-xs font-medium text-stone-600 dark:text-stone-400">
-        {label}
-      </span>
+      <span className="text-xs font-medium text-muted">{label}</span>
       {children}
-      {hint && <span className="mt-1 block text-xs text-stone-400">{hint}</span>}
+      {hint && <span className="mt-1 block text-xs text-muted">{hint}</span>}
     </label>
   );
 }

@@ -68,23 +68,18 @@ export const getAllOrders = cache(async (): Promise<OrderView[]> => {
   return (data ?? []).map((r) => toView(r as Row));
 });
 
-// STATUS BADGE (label + color)
+export type BadgeTone = "amber" | "blue" | "green" | "red" | "neutral";
+
+// STATUS BADGE (label + semantic tone, rendered via <Badge>)
 export function statusBadge(
   o: Pick<OrderView, "status" | "fulfillment">,
   labels: Dict["orderStatus"],
-): { label: string; cls: string } {
-  const tone = {
-    amber: "bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300",
-    blue: "bg-blue-100 text-blue-800 dark:bg-blue-950/40 dark:text-blue-300",
-    green: "bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300",
-    red: "bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-300",
-    gray: "bg-stone-100 text-stone-600 dark:bg-stone-800 dark:text-stone-300",
-  };
-  if (o.status === "PENDING") return { label: labels.pending, cls: tone.amber };
-  if (o.status === "GAGAL") return { label: labels.failed, cls: tone.red };
+): { label: string; tone: BadgeTone } {
+  if (o.status === "PENDING") return { label: labels.pending, tone: "amber" };
+  if (o.status === "GAGAL") return { label: labels.failed, tone: "red" };
   if (o.status === "KEDALUWARSA")
-    return { label: labels.expired, cls: tone.gray };
+    return { label: labels.expired, tone: "neutral" };
   if (o.fulfillment === "selesai")
-    return { label: labels.done, cls: tone.green };
-  return { label: labels.processing, cls: tone.blue };
+    return { label: labels.done, tone: "green" };
+  return { label: labels.processing, tone: "blue" };
 }

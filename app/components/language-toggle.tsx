@@ -12,7 +12,7 @@ export default function LanguageToggle() {
     <div
       role="group"
       aria-label={t.language.label}
-      className="flex h-9 items-center rounded-full border border-stone-200 bg-white p-0.5 text-xs font-semibold dark:border-stone-700 dark:bg-stone-900"
+      className="flex h-9 items-center rounded-full border border-border bg-surface p-0.5 text-xs font-semibold shadow-soft"
     >
       {LOCALES.map((l) => {
         const active = l === locale;
@@ -23,10 +23,10 @@ export default function LanguageToggle() {
             onClick={() => setLocale(l)}
             aria-pressed={active}
             className={
-              "rounded-full px-2.5 py-1 outline-none transition focus-visible:ring-2 focus-visible:ring-brand-500 " +
+              "rounded-full px-2.5 py-1 outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-brand-500 " +
               (active
-                ? "bg-brand-600 text-white"
-                : "text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100")
+                ? "bg-brand-600 text-white shadow-brand"
+                : "text-muted hover:text-foreground")
             }
           >
             {NAMES[l]}

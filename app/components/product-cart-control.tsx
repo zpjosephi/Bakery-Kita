@@ -2,6 +2,7 @@
 
 import { useCart } from "../lib/cart";
 import { useI18n } from "../lib/i18n/context";
+import { Plus, Minus } from "./icons";
 
 export default function ProductCartControl({ id }: { id: string }) {
   const { items, add, setQty, hydrated } = useCart();
@@ -13,22 +14,22 @@ export default function ProductCartControl({ id }: { id: string }) {
       <button
         type="button"
         onClick={() => add(id, 1)}
-        className="inline-flex h-10 w-32 items-center justify-center gap-1.5 rounded-full bg-brand-600 text-sm font-medium text-white shadow-sm outline-none transition hover:bg-brand-700 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.98]"
+        className="inline-flex h-10 w-32 items-center justify-center gap-1.5 rounded-full bg-brand-600 text-sm font-medium text-white shadow-brand outline-none transition-[transform,background-color] duration-200 ease-[var(--ease-out-soft)] hover:-translate-y-px hover:bg-brand-700 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.97]"
       >
-        <span className="text-base leading-none">+</span> {t.cart.add}
+        <Plus width={16} height={16} /> {t.cart.add}
       </button>
     );
   }
 
   return (
-    <div className="flex h-10 w-32 items-center justify-between rounded-full border border-stone-200 bg-white px-1 dark:border-stone-700 dark:bg-stone-900">
+    <div className="flex h-10 w-32 items-center justify-between rounded-full border border-border bg-surface px-1 shadow-soft">
       <button
         type="button"
         onClick={() => setQty(id, qty - 1)}
-        className="grid h-8 w-8 place-items-center rounded-full text-lg leading-none text-stone-700 outline-none transition hover:bg-stone-100 focus-visible:ring-2 focus-visible:ring-brand-500 dark:text-stone-200 dark:hover:bg-stone-800"
+        className="grid h-8 w-8 place-items-center rounded-full text-foreground outline-none transition-colors hover:bg-brand-100/60 focus-visible:ring-2 focus-visible:ring-brand-500"
         aria-label={t.cart.decrease}
       >
-        −
+        <Minus width={16} height={16} />
       </button>
       <span className="min-w-5 text-center text-sm font-semibold tabular-nums">
         {qty}
@@ -36,10 +37,10 @@ export default function ProductCartControl({ id }: { id: string }) {
       <button
         type="button"
         onClick={() => setQty(id, qty + 1)}
-        className="grid h-8 w-8 place-items-center rounded-full text-lg leading-none text-stone-700 outline-none transition hover:bg-stone-100 focus-visible:ring-2 focus-visible:ring-brand-500 dark:text-stone-200 dark:hover:bg-stone-800"
+        className="grid h-8 w-8 place-items-center rounded-full text-foreground outline-none transition-colors hover:bg-brand-100/60 focus-visible:ring-2 focus-visible:ring-brand-500"
         aria-label={t.cart.increase}
       >
-        +
+        <Plus width={16} height={16} />
       </button>
     </div>
   );

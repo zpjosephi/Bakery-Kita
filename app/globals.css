@@ -1,45 +1,121 @@
 @import "tailwindcss";
 
-/* Force light mode: dark: variants only apply under a .dark class (never set),
-   otherwise Tailwind v4 follows the OS color scheme. */
+/* Light-only: dark: variants stay inert (no .dark class is ever set). */
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #fcfbf9; /* warm cream white */
-  --foreground: #1c1917; /* stone-900 */
+  --background: #faf6ef; /* warm cream */
+  --surface: #fffdfa; /* raised card */
+  --foreground: #211a14; /* warm near-black */
+  --muted: #7c6f63; /* warm stone for secondary text */
+  --border: #e8ddcd; /* warm hairline */
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-fraunces);
 
-  /* brand color (warm caramel) */
-  --color-brand-50: #fbf5ec;
-  --color-brand-100: #f5e6cf;
-  --color-brand-200: #ecca9c;
-  --color-brand-300: #e0a967;
-  --color-brand-400: #d68c3d;
-  --color-brand-500: #c0721f;
-  --color-brand-600: #a25c18;
-  --color-brand-700: #824817;
-  --color-brand-800: #6a3b18;
-  --color-brand-900: #583218;
+  /* brand — warm caramel, single accent */
+  --color-brand-50: #fbf4e9;
+  --color-brand-100: #f5e4c9;
+  --color-brand-200: #ecc79a;
+  --color-brand-300: #e0a563;
+  --color-brand-400: #d4863a;
+  --color-brand-500: #bd6c1f;
+  --color-brand-600: #a1571a;
+  --color-brand-700: #82451a;
+  --color-brand-800: #693819;
+  --color-brand-900: #563016;
+
+  /* warm-tinted elevation (light source top, hue carries the brand) */
+  --shadow-soft: 0 1px 2px rgba(86, 48, 22, 0.05),
+    0 4px 12px rgba(86, 48, 22, 0.05);
+  --shadow-card: 0 1px 2px rgba(86, 48, 22, 0.06),
+    0 8px 24px -6px rgba(86, 48, 22, 0.1);
+  --shadow-lift: 0 2px 4px rgba(86, 48, 22, 0.06),
+    0 16px 36px -10px rgba(86, 48, 22, 0.16);
+  --shadow-brand: 0 1px 2px rgba(161, 87, 26, 0.2),
+    0 8px 20px -6px rgba(161, 87, 26, 0.35);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html {
   scroll-behavior: smooth;
+  /* base color lives on the root so body pseudo-layers can sit above it */
+  background-color: var(--background);
 }
 
 body {
-  background: var(--background);
+  position: relative;
+  background: transparent;
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Ambient warmth: soft caramel glow top, fades into the cream. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(60rem 32rem at 50% -8rem, rgba(212, 134, 58, 0.16), transparent 70%),
+    radial-gradient(40rem 28rem at 100% 0, rgba(189, 108, 31, 0.08), transparent 65%);
+}
+
+/* Fine grain so flat fills never feel sterile. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+.font-display {
+  font-family: var(--font-display), ui-serif, Georgia, serif;
+  font-optical-sizing: auto;
+  letter-spacing: -0.015em;
 }
 
 ::selection {
   background-color: var(--color-brand-200);
   color: var(--color-brand-900);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

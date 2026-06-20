@@ -4,7 +4,8 @@ import SiteHeader from "../components/site-header";
 import { getCurrentUser } from "../lib/auth";
 import { getMyOrders, statusBadge } from "../lib/orders-view";
 import { formatRupiah } from "../lib/products";
-import { buttonClass } from "../components/ui";
+import { buttonClass, cardClass, Badge } from "../components/ui";
+import { Receipt, ArrowRight } from "../components/icons";
 import { getDict, getLocale } from "../lib/i18n/server";
 
 export async function generateMetadata() {
@@ -33,16 +34,16 @@ export default async function MyOrdersPage() {
     <div className="min-h-screen">
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-6 py-10">
-        <h1 className="mb-6 text-2xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
+        <h1 className="font-display mb-6 text-3xl font-semibold text-foreground">
           {t.orders.title}
         </h1>
 
         {orders.length === 0 ? (
-          <div className="rounded-2xl border border-stone-200 py-20 text-center dark:border-stone-800">
-            <p className="text-5xl">🧾</p>
-            <p className="mt-4 text-stone-500 dark:text-stone-400">
-              {t.orders.empty}
-            </p>
+          <div className={cardClass("flex flex-col items-center px-6 py-20 text-center")}>
+            <span className="grid h-16 w-16 place-items-center rounded-2xl bg-brand-100 text-brand-600">
+              <Receipt width={30} height={30} />
+            </span>
+            <p className="mt-5 text-muted">{t.orders.empty}</p>
             <Link href="/" className={`mt-6 ${buttonClass("primary", "md")}`}>
               {t.orders.viewMenu}
             </Link>
@@ -53,39 +54,32 @@ export default async function MyOrdersPage() {
               const badge = statusBadge(o, t.orderStatus);
               const totalItem = o.items.reduce((s, i) => s + i.qty, 0);
               return (
-                <li
-                  key={o.orderId}
-                  className="rounded-2xl border border-stone-200 bg-white p-5 dark:border-stone-800 dark:bg-stone-900/40"
-                >
+                <li key={o.orderId} className={cardClass("p-5")}>
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="text-xs text-stone-400">
+                    <span className="text-xs tabular-nums text-muted">
                       {formatTanggal(o.createdAt, locale)}
                     </span>
-                    <span
-                      className={`rounded-full px-2.5 py-1 text-xs font-medium ${badge.cls}`}
-                    >
-                      {badge.label}
-                    </span>
+                    <Badge tone={badge.tone}>{badge.label}</Badge>
                   </div>
 
-                  <ul className="mt-3 space-y-1 text-sm text-stone-600 dark:text-stone-300">
+                  <ul className="mt-3 space-y-1 text-sm text-foreground/80">
                     {o.items.map((it) => (
                       <li key={it.id} className="flex justify-between gap-3">
                         <span className="truncate">
                           {it.qty}× {it.name}
                         </span>
-                        <span className="shrink-0 tabular-nums text-stone-400">
+                        <span className="shrink-0 tabular-nums text-muted">
                           {formatRupiah(it.price * it.qty)}
                         </span>
                       </li>
                     ))}
                   </ul>
 
-                  <div className="mt-3 flex items-center justify-between border-t border-stone-100 pt-3 dark:border-stone-800">
-                    <span className="text-sm text-stone-500">
+                  <div className="mt-3 flex items-center justify-between border-t border-border pt-3">
+                    <span className="text-sm text-muted">
                       {t.orders.totalN(totalItem)}
                     </span>
-                    <span className="font-bold tabular-nums text-brand-700 dark:text-brand-300">
+                    <span className="font-bold tabular-nums text-brand-700">
                       {formatRupiah(o.amount)}
                     </span>
                   </div>
@@ -96,6 +90,7 @@ export default async function MyOrdersPage() {
                       className={`mt-4 w-full ${buttonClass("primary", "md")}`}
                     >
                       {t.orders.continuePayment}
+                      <ArrowRight width={17} height={17} />
                     </Link>
                   )}
                 </li>

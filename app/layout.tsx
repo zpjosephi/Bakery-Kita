@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Fraunces } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "./lib/cart";
 import { ProductsProvider } from "./lib/products-context";
@@ -17,6 +17,13 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+// display serif with character for headlines (variable weight + optical sizing)
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -38,7 +45,7 @@ export default async function RootLayout({
     <html
       lang={locale}
       data-scroll-behavior="smooth"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <I18nProvider initialLocale={locale}>
