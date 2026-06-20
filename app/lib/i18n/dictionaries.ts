@@ -96,7 +96,7 @@ const en = {
     qrAlt: "QRIS payment",
     creatingQr: "Creating QR…",
     waiting: "Waiting for payment…",
-    howToTitle: "How to pay (sandbox · fake money)",
+    howToTitle: "How to pay (test mode)",
     step1: "Click “Copy QR image URL” below.",
     step2pre: "Open the simulator → paste into the ",
     step2field: "“QR Code Image Url”",
@@ -109,9 +109,9 @@ const en = {
     copyUrl: "Copy QR image URL",
     openSimulator: "Open QRIS Simulator",
     noQrUrl: "QR image URL not available from Midtrans.",
-    successTitle: "Payment received!",
+    successTitle: "Payment received",
     successBody: (amount: string) =>
-      `We've received ${amount}. Your order is being prepared. 🍞`,
+      `We've received ${amount}. Your order is on its way to the oven. 🍞`,
     backToMenu: "Back to menu",
     expiredTitle: "QR Expired",
     failedTitle: "Payment Failed",
@@ -148,12 +148,12 @@ const en = {
     pwTooShort: "Password too short (at least 6 characters).",
     rateLimit: "Too many attempts. Wait a moment and try again.",
     signupCheckEmail:
-      "Account created! Check your email to confirm, then log in.",
+      "Account created. Check your email to confirm, then log in.",
   },
 
   orders: {
     title: "My Orders",
-    empty: "No orders yet. Order your first bread!",
+    empty: "No orders yet. Order your first loaf.",
     viewMenu: "View menu",
     totalN: (n: number) => `Total ${n} items`,
     continuePayment: "Continue payment",
@@ -290,7 +290,7 @@ const id: Dict = {
 
   cart: {
     label: "Keranjang",
-    add: "Keranjang",
+    add: "Tambah",
     open: (n: number) => `Buka keranjang, ${n} item`,
     decrease: "Kurangi jumlah",
     increase: "Tambah jumlah",
@@ -299,8 +299,8 @@ const id: Dict = {
 
   catalog: {
     freshLabel: "Fresh tiap pagi",
-    heroTitle: "Roti & kue rumahan, dipanggang dalam jumlah kecil.",
-    heroSubtitle: "Tinggal pilih, scan, beres — bayar lewat QRIS.",
+    heroTitle: "Roti & kue rumahan, hangat dari oven tiap hari.",
+    heroSubtitle: "Tinggal pilih, scan, beres — bayarnya lewat QRIS.",
     menu: "Menu",
     productCount: (n: number) => `${n} produk`,
   },
@@ -317,18 +317,18 @@ const id: Dict = {
     totalItems: "Total item",
     pcs: "pcs",
     orderTotal: "Total belanja",
-    checkout: "Lanjut ke Checkout",
-    confirmClear: "Yakin kosongkan?",
+    checkout: "Lanjut ke checkout",
+    confirmClear: "Yakin mau dikosongkan?",
     yesClear: "Ya, hapus",
     cancel: "Batal",
     clear: "Kosongkan",
   },
 
   checkout: {
-    emptyMsg: "Keranjangmu masih kosong, jadi belum ada yang dibayar.",
+    emptyMsg: "Keranjangmu masih kosong, jadi belum ada yang perlu dibayar.",
     viewMenu: "Lihat menu",
     title: "Checkout",
-    buyerData: "Data Pembeli",
+    buyerData: "Data pembeli",
     fullName: "Nama lengkap",
     namePlaceholder: "mis. Budi Santoso",
     phone: "No. HP / WhatsApp",
@@ -343,7 +343,7 @@ const id: Dict = {
     creatingQris: "Membuat QRIS…",
     payWithQris: "Bayar dengan QRIS",
     practiceNote:
-      "Mode latihan — pakai QRIS sandbox, nggak ada uang beneran terpotong.",
+      "Ini mode simulasi pakai QRIS sandbox — nggak ada uang asli yang terpotong.",
     summary: "Ringkasan",
     totalN: (n: number) => `Total (${n} pcs)`,
   },
@@ -353,12 +353,12 @@ const id: Dict = {
     unexpected: "Terjadi kesalahan.",
     qrImageError: "Gagal membuat gambar QR.",
     loadingOrder: "Memuat pesanan…",
-    scanToPay: "Scan untuk Bayar",
+    scanToPay: "Scan untuk bayar",
     total: "Total",
     qrAlt: "QRIS pembayaran",
     creatingQr: "Membuat QR…",
     waiting: "Menunggu pembayaran…",
-    howToTitle: "Cara bayar (sandbox · uang palsu)",
+    howToTitle: "Cara bayar (mode simulasi)",
     step1: "Klik “Salin URL gambar QR” di bawah.",
     step2pre: "Buka simulator → tempel di kolom ",
     step2field: "“QR Code Image Url”",
@@ -371,14 +371,14 @@ const id: Dict = {
     copyUrl: "Salin URL gambar QR",
     openSimulator: "Buka QRIS Simulator",
     noQrUrl: "URL gambar QR tidak tersedia dari Midtrans.",
-    successTitle: "Pembayaran masuk!",
+    successTitle: "Pembayaran berhasil",
     successBody: (amount: string) =>
-      `Dana ${amount} sudah kami terima. Pesananmu langsung disiapkan, ya. 🍞`,
+      `Dana ${amount} sudah kami terima. Pesananmu langsung kami siapkan, ya. 🍞`,
     backToMenu: "Kembali ke menu",
-    expiredTitle: "QR Kedaluwarsa",
-    failedTitle: "Pembayaran Gagal",
+    expiredTitle: "QR kedaluwarsa",
+    failedTitle: "Pembayaran gagal",
     failedBody:
-      "Tenang, belum ada yang terpotong. Coba pesan ulang dari keranjang, ya.",
+      "Tenang, belum ada dana yang terpotong. Coba pesan lagi dari keranjang, ya.",
     backToCart: "Kembali ke keranjang",
   },
 
@@ -405,17 +405,17 @@ const id: Dict = {
     nameMin: "Nama minimal 2 karakter.",
     pwMin: "Password minimal 6 karakter.",
     invalidCreds: "Email atau password salah.",
-    emailNotConfirmed: "Email belum dikonfirmasi. Cek inbox kamu dulu, ya.",
-    alreadyRegistered: "Email ini sudah terdaftar. Coba masuk saja.",
+    emailNotConfirmed: "Email belum dikonfirmasi. Cek dulu inbox kamu, ya.",
+    alreadyRegistered: "Email ini sudah terdaftar. Masuk aja, yuk.",
     pwTooShort: "Password terlalu pendek (minimal 6 karakter).",
-    rateLimit: "Terlalu banyak percobaan. Tunggu sebentar lalu coba lagi.",
+    rateLimit: "Terlalu banyak percobaan. Tunggu sebentar, lalu coba lagi.",
     signupCheckEmail:
-      "Akun berhasil dibuat! Cek email kamu untuk konfirmasi, lalu masuk.",
+      "Akun kamu berhasil dibuat. Cek email untuk konfirmasi, lalu masuk.",
   },
 
   orders: {
     title: "Pesanan Saya",
-    empty: "Belum ada pesanan. Yuk, pesan roti pertamamu!",
+    empty: "Belum ada pesanan di sini. Yuk, pesan roti pertamamu.",
     viewMenu: "Lihat menu",
     totalN: (n: number) => `Total ${n} item`,
     continuePayment: "Lanjutkan pembayaran",
@@ -463,7 +463,7 @@ const id: Dict = {
     order: "Urutan",
     photo: "Foto produk (opsional)",
     photoHint:
-      "Upload gambar, atau tempel path/URL manual. Kosong → pakai emoji.",
+      "Unggah gambar, atau tempel path/URL-nya. Kalau kosong, dipakai emoji.",
     preview: "Pratinjau",
     uploading: "Mengupload…",
     imagePlaceholder: "/products/nama.jpg atau URL hasil upload",
@@ -489,7 +489,7 @@ const id: Dict = {
 
   footer: {
     tagline: "Toko contoh pembayaran QRIS · Midtrans Sandbox",
-    madeBy: "made by",
+    madeBy: "dibuat oleh",
   },
 
   charge: {
@@ -521,7 +521,7 @@ const id: Dict = {
   notFound: {
     code: "404",
     title: "Halaman tidak ditemukan",
-    body: "Mungkin sudah dipindah, atau memang belum keluar dari oven. Yuk, balik ke yang fresh.",
+    body: "Mungkin sudah dipindah, atau memang belum keluar dari oven. Yuk, balik ke menu.",
     back: "Kembali ke menu",
   },
 
