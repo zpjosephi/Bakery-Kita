@@ -37,7 +37,7 @@ const en = {
 
   catalog: {
     freshLabel: "Fresh every morning",
-    heroTitle: "Homemade bread & cakes, baked in small batches.",
+    heroTitle: "Homemade bread & cakes, warm from the oven.",
     heroSubtitle: "Pick what you like, scan, done — pay with QRIS.",
     menu: "Menu",
     productCount: (n: number) => `${n} products`,
