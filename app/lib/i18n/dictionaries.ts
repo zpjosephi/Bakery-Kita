@@ -267,6 +267,24 @@ const en = {
     back: "Back to menu",
   },
 
+  feedback: {
+    open: "Feedback",
+    title: "Got feedback?",
+    subtitle: "Spotted a bug or have an idea? Tell me — it lands in my Discord.",
+    messageLabel: "Your feedback",
+    placeholder: "What's good, what's off, what you'd love to see…",
+    fromLabel: "Name or contact",
+    fromOptional: "optional",
+    fromPlaceholder: "So I can reply — IG, email, anything",
+    send: "Send",
+    sending: "Sending…",
+    successTitle: "Thanks for the note",
+    successBody: "Your feedback came through. I read every one.",
+    error: "Couldn't send that. Please try again.",
+    another: "Send another",
+    close: "Close",
+  },
+
   language: {
     label: "Language",
   },
@@ -531,6 +549,24 @@ const id: Dict = {
     title: "Halaman tidak ditemukan",
     body: "Mungkin sudah dipindah, atau memang belum keluar dari oven. Yuk, balik ke menu.",
     back: "Kembali ke menu",
+  },
+
+  feedback: {
+    open: "Masukan",
+    title: "Punya masukan?",
+    subtitle: "Nemu bug atau ada ide? Kasih tau aku — langsung masuk ke Discord-ku.",
+    messageLabel: "Masukan kamu",
+    placeholder: "Apa yang oke, apa yang kurang, apa yang kamu pengen…",
+    fromLabel: "Nama atau kontak",
+    fromOptional: "opsional",
+    fromPlaceholder: "Biar bisa aku balas — IG, email, apa aja",
+    send: "Kirim",
+    sending: "Mengirim…",
+    successTitle: "Makasih masukannya",
+    successBody: "Masukanmu udah masuk. Aku baca satu-satu.",
+    error: "Gagal terkirim. Coba lagi, ya.",
+    another: "Kirim lagi",
+    close: "Tutup",
   },
 
   language: {

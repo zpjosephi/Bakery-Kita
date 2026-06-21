@@ -235,6 +235,32 @@ export function Globe(props: IconProps) {
   );
 }
 
+export function Chat(props: IconProps) {
+  return (
+    <Line {...props}>
+      <path d="M4 5.5h16A1.5 1.5 0 0 1 21.5 7v8A1.5 1.5 0 0 1 20 16.5H9.5L5 20.5V16.5H4A1.5 1.5 0 0 1 2.5 15V7A1.5 1.5 0 0 1 4 5.5Z" />
+      <path d="M7.5 10h9M7.5 13h5.5" />
+    </Line>
+  );
+}
+
+export function Send(props: IconProps) {
+  return (
+    <Line {...props}>
+      <path d="M21 3 10.5 13.5" />
+      <path d="M21 3l-6.6 18-3.9-8.5L2 8.6 21 3Z" />
+    </Line>
+  );
+}
+
+export function Close(props: IconProps) {
+  return (
+    <Line {...props}>
+      <path d="M6 6l12 12M18 6 6 18" />
+    </Line>
+  );
+}
+
 // In-button loading: GPU-friendly spin on a single arc.
 export function Spinner({ className = "", ...props }: IconProps) {
   return (

@@ -8,6 +8,7 @@ import { I18nProvider } from "./lib/i18n/context";
 import { getDict, getLocale } from "./lib/i18n/server";
 import CartToast from "./components/cart-toast";
 import SiteFooter from "./components/site-footer";
+import FeedbackWidget from "./components/feedback-widget";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -56,6 +57,7 @@ export default async function RootLayout({
             </CartProvider>
           </ProductsProvider>
           <SiteFooter />
+          <FeedbackWidget />
         </I18nProvider>
       </body>
     </html>
