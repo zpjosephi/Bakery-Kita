@@ -230,10 +230,7 @@ const en = {
   footer: {
     tagline: "A demo storefront — QRIS checkout on the Midtrans Sandbox.",
     explore: "Explore",
-    project: "Project",
-    sourceCode: "Source code",
     builtWith: "Built with",
-    madeBy: "made by",
   },
 
   charge: {
@@ -498,10 +495,7 @@ const id: Dict = {
   footer: {
     tagline: "Toko demo — checkout QRIS di Midtrans Sandbox.",
     explore: "Jelajah",
-    project: "Proyek",
-    sourceCode: "Kode sumber",
     builtWith: "Dibuat dengan",
-    madeBy: "dibuat oleh",
   },
 
   charge: {
