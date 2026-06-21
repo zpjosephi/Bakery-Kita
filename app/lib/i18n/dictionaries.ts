@@ -231,6 +231,7 @@ const en = {
     tagline: "A demo storefront — QRIS checkout on the Midtrans Sandbox.",
     explore: "Explore",
     builtWith: "Built with",
+    madeBy: "made by",
   },
 
   charge: {
@@ -496,6 +497,7 @@ const id: Dict = {
     tagline: "Toko demo — checkout QRIS di Midtrans Sandbox.",
     explore: "Jelajah",
     builtWith: "Dibuat dengan",
+    madeBy: "dibuat oleh",
   },
 
   charge: {

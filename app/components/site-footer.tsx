@@ -54,8 +54,19 @@ export default function SiteFooter() {
       </div>
 
       <div className="border-t border-border/70">
-        <div className="mx-auto max-w-5xl px-6 py-5 text-center text-xs tabular-nums text-muted sm:text-left">
-          © {year} {t.brand}
+        <div className="mx-auto flex max-w-5xl flex-col items-center gap-1 px-6 py-5 text-xs text-muted sm:flex-row sm:justify-between">
+          <span className="tabular-nums">© {year} {t.brand}</span>
+          <span>
+            {t.footer.madeBy}{" "}
+            <a
+              href="https://instagram.com/zpjosephi"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-foreground/70 underline-offset-2 transition-colors hover:text-brand-700 hover:underline"
+            >
+              @zpjosephi
+            </a>
+          </span>
         </div>
       </div>
     </footer>
