@@ -39,6 +39,8 @@ const en = {
     freshLabel: "Fresh every morning",
     heroTitle: "Homemade bread & cakes, warm from the oven.",
     heroSubtitle: "Pick what you like, scan, done — pay with QRIS.",
+    cta: "View menu",
+    featured: "Today's pick",
     menu: "Menu",
     productCount: (n: number) => `${n} products`,
   },
@@ -226,7 +228,11 @@ const en = {
   },
 
   footer: {
-    tagline: "Sample QRIS checkout · Midtrans Sandbox",
+    tagline: "A demo storefront — QRIS checkout on the Midtrans Sandbox.",
+    explore: "Explore",
+    project: "Project",
+    sourceCode: "Source code",
+    builtWith: "Built with",
     madeBy: "made by",
   },
 
@@ -301,6 +307,8 @@ const id: Dict = {
     freshLabel: "Fresh tiap pagi",
     heroTitle: "Roti & kue rumahan, hangat dari oven tiap hari.",
     heroSubtitle: "Tinggal pilih, scan, beres — bayarnya lewat QRIS.",
+    cta: "Lihat menu",
+    featured: "Pilihan hari ini",
     menu: "Menu",
     productCount: (n: number) => `${n} produk`,
   },
@@ -488,7 +496,11 @@ const id: Dict = {
   },
 
   footer: {
-    tagline: "Toko contoh pembayaran QRIS · Midtrans Sandbox",
+    tagline: "Toko demo — checkout QRIS di Midtrans Sandbox.",
+    explore: "Jelajah",
+    project: "Proyek",
+    sourceCode: "Kode sumber",
+    builtWith: "Dibuat dengan",
     madeBy: "dibuat oleh",
   },
 
