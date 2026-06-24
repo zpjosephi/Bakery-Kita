@@ -77,6 +77,16 @@ export default function HackLab() {
   const [pesanPeran, setPesanPeran] = useState("");
   const [panelAdmin, setPanelAdmin] = useState(false);
 
+  // Lesson 8 - link gambar / XSS
+  const [imgUrl, setImgUrl] = useState(
+    "https://picsum.photos/seed/42/240/160",
+  );
+
+  // Versi BAHAYA: link ditempel mentah ke HTML. Dijalankan di iframe sandbox
+  // (tanpa allow-same-origin) supaya skrip korban terkurung, tidak bisa
+  // menyentuh origin asli / cookie / data app. Ini sengaja "bocor" buat latihan.
+  const htmlBahaya = `<!doctype html><html><body style="margin:0;font-family:system-ui;color:#7c6f63;font-size:13px">menampilkan: <img src="${imgUrl}" alt="" style="max-width:100%;display:block;margin-top:6px"></body></html>`;
+
   function cekBayar() {
     const dikirim = hargaRef.current?.value ?? "?";
     setPesanBayar(
@@ -362,6 +372,80 @@ export default function HackLab() {
           </Jawaban>
         </Card>
       </div>
+
+        {/* 8 - gambar dari link / XSS */}
+        <Card no={8} judul="Gambar dari link, dan kenapa bisa berbahaya">
+          <p>
+            Web yang ambil gambar dari sebuah link (URL) itu biasa. Bahayanya
+            muncul kalau link-nya datang dari luar (input atau parameter URL) lalu
+            ditempel mentah ke HTML. Penyerang bisa nyelipin kode di situ.
+          </p>
+          <label className="block text-sm font-medium text-foreground">
+            Link gambar
+            <input
+              value={imgUrl}
+              onChange={(e) => setImgUrl(e.target.value)}
+              className="mt-1 w-full rounded-lg border border-border bg-surface px-3 py-2 font-mono text-[13px] outline-none focus-visible:ring-2 focus-visible:ring-brand-300"
+            />
+          </label>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="rounded-xl border border-border bg-background/60 p-3">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-brand-700">
+                Cara aman (React)
+              </p>
+              {/* React memperlakukan seluruh string sebagai nilai src, jadi
+                  payload cuma jadi src rusak. Tidak ada kode yang jalan. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={imgUrl}
+                alt="render aman"
+                className="max-w-full rounded-lg"
+              />
+            </div>
+            <div className="rounded-xl border border-red-300 bg-red-50/50 p-3">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-red-700">
+                Cara bahaya (link ditempel mentah)
+              </p>
+              <iframe
+                title="render-bahaya-terisolasi"
+                sandbox="allow-scripts allow-modals"
+                srcDoc={htmlBahaya}
+                className="h-40 w-full rounded-lg border border-red-200 bg-white"
+              />
+            </div>
+          </div>
+
+          <Coba>
+            Ganti isi kolom link di atas jadi:{" "}
+            <code>x&quot; onerror=&quot;alert(&apos;XSS jalan&apos;)</code>{" "}
+            (termasuk tanda kutipnya). Lihat bedanya: panel kiri diam saja, panel
+            kanan memunculkan pop-up.
+          </Coba>
+          <Jawaban>
+            <p>
+              Di panel kanan, link tadi jadi{" "}
+              <code>{`<img src="x" onerror="alert('XSS jalan')">`}</code>. Gambar
+              gagal dimuat, lalu <code>onerror</code> menjalankan kode. Ini namanya
+              XSS: kamu bisa kirim link berisi payload ke korban, dan kode itu jalan
+              di browser dia (nyolong sesi, ngerusak tampilan, dll). Di lab ini
+              skripnya terkurung di iframe sandbox, jadi tidak menyentuh apa pun.
+            </p>
+            <p>
+              <b>Kenapa panel kiri aman:</b> React tidak pernah menempel string ke
+              HTML mentah. Seluruh teks dianggap sebagai nilai <code>src</code>, jadi
+              payload cuma jadi alamat gambar yang rusak, bukan kode.
+            </p>
+            <p>
+              <b>Cara nutup:</b> jangan pernah membangun HTML dari input/URL pakai{" "}
+              <code>dangerouslySetInnerHTML</code> atau template string. Kalau link
+              dari luar, batasi ke daftar domain yang diizinkan, dan pasang Content
+              Security Policy. Bonus: kalau server kamu yang fetch URL gambarnya
+              (bikin thumbnail dll), batasi tujuannya, kalau tidak bisa jadi SSRF
+              (server kamu dipaksa nembak alamat internal).
+            </p>
+          </Jawaban>
+        </Card>
 
       <footer className="mt-12 border-t border-border pt-6 text-sm text-muted">
         Benang merah ketujuh kartu: jangan pernah percaya apa pun yang datang dari
