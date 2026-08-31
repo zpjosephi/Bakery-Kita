@@ -40,7 +40,7 @@ export function Button({
   return <button className={`${buttonClass(variant, size)} ${className}`} {...props} />;
 }
 
-// Shared raised surface — warm hairline + tinted shadow, never border+shadow generic.
+// Shared raised surface: warm hairline plus tinted shadow, never the generic border+shadow.
 export function cardClass(className = "") {
   return `rounded-2xl border border-border bg-surface shadow-card ${className}`;
 }

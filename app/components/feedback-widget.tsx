@@ -134,7 +134,7 @@ export default function FeedbackWidget() {
                 />
               </label>
 
-              {/* honeypot — visually hidden, off the a11y tree */}
+              {/* honeypot: visually hidden, off the a11y tree */}
               <input
                 ref={honeypotRef}
                 type="text"

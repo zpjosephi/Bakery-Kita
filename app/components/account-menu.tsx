@@ -10,7 +10,7 @@ import { User, LogOut } from "./icons";
 
 type Account = { name: string; role: "customer" | "admin" };
 
-// header account area — login/signup links, or greeting + logout
+// Header account area: login/signup links, or a greeting plus logout.
 export default function AccountMenu() {
   const router = useRouter();
   const pathname = usePathname();

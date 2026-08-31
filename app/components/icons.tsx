@@ -23,7 +23,7 @@ function Line({ children, ...props }: IconProps) {
   );
 }
 
-// Brand mark — a wheat sheaf. Solid so it reads at small sizes in the header.
+// Brand mark, a wheat sheaf. Solid so it reads at small sizes in the header.
 export function Wheat({ className, ...props }: IconProps) {
   return (
     <svg

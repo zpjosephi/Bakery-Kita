@@ -110,7 +110,7 @@ export default function PayPage() {
         ) : order.status === "KEDALUWARSA" || order.status === "GAGAL" ? (
           <FailedPanel status={order.status} />
         ) : (
-          // PENDING — show QR + simulator instructions
+          // PENDING: show the QR plus simulator instructions
           <div className={cardClass("p-6 text-center")}>
             <h1 className="font-display text-xl font-semibold text-foreground">
               {t.pay.scanToPay}

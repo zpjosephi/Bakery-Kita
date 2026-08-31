@@ -12,7 +12,7 @@ export async function generateMetadata() {
   return { title: (await getDict()).meta.adminTitle };
 }
 
-// ADMIN — manage products
+// Admin dashboard: the product catalog editor.
 export default async function AdminPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/masuk");

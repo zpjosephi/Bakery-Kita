@@ -20,7 +20,7 @@ function formatTanggal(iso: string, locale: string): string {
   }).format(new Date(iso));
 }
 
-// ADMIN — incoming orders
+// Admin dashboard: incoming orders, newest first.
 export default async function AdminOrdersPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/masuk");

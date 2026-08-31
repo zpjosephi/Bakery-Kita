@@ -6,8 +6,14 @@ import { createClient } from "../lib/supabase/server";
 import { getDict } from "../lib/i18n/server";
 import type { Dict } from "../lib/i18n/dictionaries";
 
+// Login, signup and logout. None of these touch our own tables directly:
+// Supabase Auth owns auth.users, and the matching profiles row is created by
+// the on_auth_user_created trigger in supabase/schema.sql.
+
 export type AuthState = { error?: string; message?: string } | undefined;
 
+// Supabase returns English auth errors. Map the ones a user can act on to our
+// own wording, and pass anything unrecognised straight through.
 function pesanError(raw: string, t: Dict): string {
   const m = raw.toLowerCase();
   if (m.includes("invalid login credentials")) return t.auth.invalidCreds;
@@ -56,6 +62,8 @@ export async function signup(
   if (password.length < 6) return { error: t.auth.pwMin };
 
   const supabase = await createClient();
+  // options.data lands in auth.users.raw_user_meta_data, which is where the
+  // handle_new_user() trigger reads full_name from when it inserts the profile.
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -63,6 +71,8 @@ export async function signup(
   });
   if (error) return { error: pesanError(error.message, t) };
 
+  // No session means email confirmation is switched on, so the account exists
+  // but isn't usable until the link is clicked.
   if (!data.session) {
     return { message: t.auth.signupCheckEmail };
   }

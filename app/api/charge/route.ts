@@ -6,6 +6,11 @@ import { saveOrder, type OrderItem } from "../../lib/orders";
 import { getCurrentUser } from "../../lib/auth";
 import { getDict } from "../../lib/i18n/server";
 
+// Checkout. Validates the cart, asks Midtrans for a QRIS code, then writes the
+// order row.
+//
+// The browser only ever sends product ids and quantities, never prices. Note
+// what ChargeBody deliberately leaves out.
 type ChargeBody = {
   customer?: { nama?: string; hp?: string; alamat?: string };
   items?: { id?: string; qty?: number }[];
@@ -38,6 +43,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: t.charge.emptyCart }, { status: 400 });
   }
 
+  // Rebuild the cart from the database. Every price and name comes from the
+  // products table, so a tampered request can change what is bought but never
+  // what it costs. The result is also the snapshot stored in orders.items.
   const orderItems: OrderItem[] = [];
   let amount = 0;
   for (const line of items) {
@@ -53,6 +61,9 @@ export async function POST(request: Request) {
     orderItems.push({ id: product.id, name: product.name, price: product.price, qty });
   }
 
+  // Primary key of the orders row and the reference Midtrans knows it by.
+  // Timestamp for rough ordering, random suffix so two simultaneous checkouts
+  // can't collide.
   const orderId = `ORDER-${Date.now()}-${randomUUID().slice(0, 8)}`;
 
   try {

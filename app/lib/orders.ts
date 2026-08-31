@@ -1,6 +1,13 @@
 import "server-only";
 import { createAdminClient } from "./supabase/admin";
 
+// Writes to the orders table, done with the service role key so they work
+// without a logged-in user (guest checkout, and Midtrans webhooks).
+// Reads for the UI live in orders-view.ts instead, where RLS does apply.
+//
+// "server-only" makes the build fail loudly if a client component ever imports
+// this file, which would drag the service role key into the browser bundle.
+
 export type OrderStatus = "PENDING" | "LUNAS" | "GAGAL" | "KEDALUWARSA";
 
 export type OrderItem = {
@@ -10,6 +17,7 @@ export type OrderItem = {
   qty: number;
 };
 
+// The shape the app works with: camelCase, like the rest of the TypeScript.
 export type Order = {
   orderId: string;
   userId?: string | null;
@@ -23,6 +31,7 @@ export type Order = {
   expiryTime?: string;
 };
 
+// The shape the database returns: snake_case, one field per column.
 type OrderRow = {
   order_id: string;
   user_id: string | null;
@@ -36,6 +45,10 @@ type OrderRow = {
   expiry_time: string | null;
 };
 
+// Single translation point between the two shapes above. Keeping it in one
+// function means a column rename only has to be handled here.
+// Note NULL becomes undefined: the database has one "missing" value,
+// TypeScript has two, and the rest of the app expects undefined.
 function rowToOrder(r: OrderRow): Order {
   return {
     orderId: r.order_id,
@@ -51,7 +64,9 @@ function rowToOrder(r: OrderRow): Order {
   };
 }
 
-// SAVE NEW ORDER
+// INSERT: called once, right after Midtrans hands back a QR code.
+// customer and items are plain objects here; the driver serialises them into
+// the jsonb columns.
 export async function saveOrder(order: Order): Promise<void> {
   const supabase = createAdminClient();
   const { error } = await supabase.from("orders").insert({
@@ -69,7 +84,9 @@ export async function saveOrder(order: Order): Promise<void> {
   if (error) throw new Error(`Gagal menyimpan pesanan: ${error.message}`);
 }
 
-// GET ONE ORDER
+// SELECT one row by primary key.
+// maybeSingle() returns null when nothing matches, where single() would treat
+// "no rows" as an error. An unknown order id is a normal case here, not a fault.
 export async function getOrder(orderId: string): Promise<Order | undefined> {
   const supabase = createAdminClient();
   const { data, error } = await supabase
@@ -81,7 +98,9 @@ export async function getOrder(orderId: string): Promise<Order | undefined> {
   return data ? rowToOrder(data as OrderRow) : undefined;
 }
 
-// UPDATE PAYMENT STATUS (from Midtrans)
+// UPDATE the payment status, driven by Midtrans (webhook or status poll).
+// The .eq() is the WHERE clause. Without it this would rewrite every order in
+// the table, which is the SQL mistake that has no undo.
 export async function setOrderStatus(
   orderId: string,
   status: OrderStatus,

@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { verifySignature, mapStatus } from "../../lib/midtrans";
 import { getOrder, setOrderStatus } from "../../lib/orders";
 
+// Midtrans calls this when a payment settles, fails or expires. It is the only
+// thing that writes orders.status, and it arrives with no session, which is why
+// the write goes through the service role connection.
 type Notification = {
   order_id?: string;
   status_code?: string;
@@ -23,7 +26,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Notifikasi tidak lengkap." }, { status: 400 });
   }
 
-  // 1) verify signature — reject fake webhooks
+  // 1) verify the signature, so forged webhooks are rejected
   const valid = verifySignature({
     orderId: n.order_id,
     statusCode: n.status_code,

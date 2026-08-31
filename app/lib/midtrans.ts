@@ -77,7 +77,7 @@ export async function fetchTransactionStatus(orderId: string): Promise<{
   };
 }
 
-// VERIFY WEBHOOK — SHA512(order_id + status_code + gross_amount + server_key)
+// Verify a webhook: SHA512(order_id + status_code + gross_amount + server_key).
 export function verifySignature(input: {
   orderId: string;
   statusCode: string;

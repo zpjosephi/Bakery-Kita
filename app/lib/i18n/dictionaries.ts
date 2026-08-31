@@ -38,7 +38,7 @@ const en = {
   catalog: {
     freshLabel: "Fresh every morning",
     heroTitle: "Homemade bread & cakes, warm from the oven.",
-    heroSubtitle: "Pick what you like, scan, done — pay with QRIS.",
+    heroSubtitle: "Pick what you like, scan, done. Pay with QRIS.",
     cta: "View menu",
     featured: "Today's pick",
     menu: "Menu",
@@ -83,7 +83,7 @@ const en = {
     creatingQris: "Creating QRIS…",
     payWithQris: "Pay with QRIS",
     practiceNote:
-      "Practice mode — uses the QRIS sandbox, no real money is charged.",
+      "Practice mode: uses the QRIS sandbox, no real money is charged.",
     summary: "Summary",
     totalN: (n: number) => `Total (${n} pcs)`,
   },
@@ -188,12 +188,12 @@ const en = {
     addProduct: "Add product",
     addProductSubmit: "Add product",
     langHint:
-      "Type in English or Indonesian — the other language is filled in automatically when you save.",
+      "Type in English or Indonesian. The other language is filled in automatically when you save.",
     translateAll: "Translate existing",
     translating: "Translating…",
     translatedN: (n: number) => `Translated ${n} products.`,
     translateNone:
-      "Nothing translated — check that the GEMINI_API_KEY is set.",
+      "Nothing translated. Check that the GEMINI_API_KEY is set.",
     productName: "Product name",
     productNamePlaceholder: "e.g. Banana Bread",
     price: "Price (Rp)",
@@ -215,20 +215,20 @@ const en = {
       `Delete "${name}"? This action is permanent and cannot be undone.`,
     uploadFailed: "Upload failed.",
     bucketMissing:
-      "The 'products' bucket doesn't exist — run supabase/storage.sql first.",
+      "The 'products' bucket doesn't exist. Run supabase/storage.sql first.",
     uploadNotAllowed:
       "Upload not allowed (make sure you're an admin and storage.sql has run).",
-    accessDenied: "Access denied — admins only.",
+    accessDenied: "Access denied. Admins only.",
     nameMin: "Product name must be at least 2 characters.",
     priceNumber: "Price must be a number (≥ 0).",
     duplicateName:
-      "A product with a similar name already exists — rename it.",
+      "A product with a similar name already exists. Rename it.",
     saved: "Changes saved.",
     added: (name: string) => `Product "${name}" added.`,
   },
 
   footer: {
-    tagline: "A demo storefront — QRIS checkout on the Midtrans Sandbox.",
+    tagline: "A demo storefront with QRIS checkout on the Midtrans Sandbox.",
     explore: "Explore",
     builtWith: "Built with",
     madeBy: "made by",
@@ -250,14 +250,14 @@ const en = {
   ordersLoadError: (msg: string) => `Failed to load orders: ${msg}`,
 
   meta: {
-    homeTitle: "Bakery Kita — Catalog & Order Online",
+    homeTitle: "Bakery Kita | Catalog & Order Online",
     homeDescription: "Fresh bread & cake catalog. Order and pay via QRIS.",
-    loginTitle: "Log in — Bakery Kita",
-    signupTitle: "Sign up — Bakery Kita",
-    myOrdersTitle: "My Orders — Bakery Kita",
-    adminTitle: "Admin Dashboard — Bakery Kita",
-    adminOrdersTitle: "Incoming Orders — Admin",
-    notFoundTitle: "Page not found — Bakery Kita",
+    loginTitle: "Log in | Bakery Kita",
+    signupTitle: "Sign up | Bakery Kita",
+    myOrdersTitle: "My Orders | Bakery Kita",
+    adminTitle: "Admin Dashboard | Bakery Kita",
+    adminOrdersTitle: "Incoming Orders | Admin",
+    notFoundTitle: "Page not found | Bakery Kita",
   },
 
   notFound: {
@@ -270,12 +270,12 @@ const en = {
   feedback: {
     open: "Feedback",
     title: "Got feedback?",
-    subtitle: "Spotted a bug or have an idea? Tell me — it lands in my Discord.",
+    subtitle: "Spotted a bug or have an idea? Tell me, it lands in my Discord.",
     messageLabel: "Your feedback",
     placeholder: "What's good, what's off, what you'd love to see…",
     fromLabel: "Name or contact",
     fromOptional: "optional",
-    fromPlaceholder: "So I can reply — IG, email, anything",
+    fromPlaceholder: "So I can reply: IG, email, anything",
     send: "Send",
     sending: "Sending…",
     successTitle: "Thanks for the note",
@@ -322,7 +322,7 @@ const id: Dict = {
   catalog: {
     freshLabel: "Fresh tiap pagi",
     heroTitle: "Roti & kue rumahan, hangat dari oven tiap hari.",
-    heroSubtitle: "Tinggal pilih, scan, beres — bayarnya lewat QRIS.",
+    heroSubtitle: "Tinggal pilih, scan, beres. Bayarnya lewat QRIS.",
     cta: "Lihat menu",
     featured: "Pilihan hari ini",
     menu: "Menu",
@@ -367,7 +367,7 @@ const id: Dict = {
     creatingQris: "Membuat QRIS…",
     payWithQris: "Bayar dengan QRIS",
     practiceNote:
-      "Ini mode simulasi pakai QRIS sandbox — nggak ada uang asli yang terpotong.",
+      "Ini mode simulasi pakai QRIS sandbox. Nggak ada uang asli yang terpotong.",
     summary: "Ringkasan",
     totalN: (n: number) => `Total (${n} pcs)`,
   },
@@ -472,12 +472,12 @@ const id: Dict = {
     addProduct: "Tambah produk",
     addProductSubmit: "Tambah produk",
     langHint:
-      "Ketik pakai bahasa Indonesia atau Inggris — bahasa satunya diisi otomatis saat disimpan.",
+      "Ketik pakai bahasa Indonesia atau Inggris. Bahasa satunya diisi otomatis saat disimpan.",
     translateAll: "Terjemahkan yang ada",
     translating: "Menerjemahkan…",
     translatedN: (n: number) => `${n} produk diterjemahkan.`,
     translateNone:
-      "Tidak ada yang diterjemahkan — pastikan GEMINI_API_KEY sudah diset.",
+      "Tidak ada yang diterjemahkan. Pastikan GEMINI_API_KEY sudah diset.",
     productName: "Nama produk",
     productNamePlaceholder: "mis. Roti Pisang",
     price: "Harga (Rp)",
@@ -500,19 +500,19 @@ const id: Dict = {
       `Hapus "${name}"? Tindakan ini permanen dan tidak bisa dibatalkan.`,
     uploadFailed: "Upload gagal.",
     bucketMissing:
-      "Bucket 'products' belum dibuat — jalankan supabase/storage.sql dulu.",
+      "Bucket 'products' belum dibuat. Jalankan supabase/storage.sql dulu.",
     uploadNotAllowed:
       "Tidak diizinkan upload (pastikan kamu admin & storage.sql sudah dijalankan).",
-    accessDenied: "Akses ditolak — khusus admin.",
+    accessDenied: "Akses ditolak. Khusus admin.",
     nameMin: "Nama produk minimal 2 karakter.",
     priceNumber: "Harga harus berupa angka (≥ 0).",
-    duplicateName: "Sudah ada produk dengan nama serupa — ganti namanya.",
+    duplicateName: "Sudah ada produk dengan nama serupa. Ganti namanya.",
     saved: "Perubahan tersimpan.",
     added: (name: string) => `Produk "${name}" ditambahkan.`,
   },
 
   footer: {
-    tagline: "Toko demo — checkout QRIS di Midtrans Sandbox.",
+    tagline: "Toko demo dengan checkout QRIS di Midtrans Sandbox.",
     explore: "Jelajah",
     builtWith: "Dibuat dengan",
     madeBy: "dibuat oleh",
@@ -534,14 +534,14 @@ const id: Dict = {
   ordersLoadError: (msg: string) => `Gagal memuat pesanan: ${msg}`,
 
   meta: {
-    homeTitle: "Bakery Kita — Katalog & Pesan Online",
+    homeTitle: "Bakery Kita | Katalog & Pesan Online",
     homeDescription: "Katalog roti & kue segar. Pesan dan bayar lewat QRIS.",
-    loginTitle: "Masuk — Bakery Kita",
-    signupTitle: "Daftar — Bakery Kita",
-    myOrdersTitle: "Pesanan Saya — Bakery Kita",
-    adminTitle: "Dashboard Admin — Bakery Kita",
-    adminOrdersTitle: "Pesanan Masuk — Admin",
-    notFoundTitle: "Halaman tidak ditemukan — Bakery Kita",
+    loginTitle: "Masuk | Bakery Kita",
+    signupTitle: "Daftar | Bakery Kita",
+    myOrdersTitle: "Pesanan Saya | Bakery Kita",
+    adminTitle: "Dashboard Admin | Bakery Kita",
+    adminOrdersTitle: "Pesanan Masuk | Admin",
+    notFoundTitle: "Halaman tidak ditemukan | Bakery Kita",
   },
 
   notFound: {
@@ -554,12 +554,12 @@ const id: Dict = {
   feedback: {
     open: "Masukan",
     title: "Punya masukan?",
-    subtitle: "Nemu bug atau ada ide? Kasih tau aku — langsung masuk ke Discord-ku.",
+    subtitle: "Nemu bug atau ada ide? Kasih tau aku, langsung masuk ke Discord-ku.",
     messageLabel: "Masukan kamu",
     placeholder: "Apa yang oke, apa yang kurang, apa yang kamu pengen…",
     fromLabel: "Nama atau kontak",
     fromOptional: "opsional",
-    fromPlaceholder: "Biar bisa aku balas — IG, email, apa aja",
+    fromPlaceholder: "Biar bisa aku balas: IG, email, apa aja",
     send: "Kirim",
     sending: "Mengirim…",
     successTitle: "Makasih masukannya",

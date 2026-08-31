@@ -23,7 +23,7 @@ const SCHEMA = {
 const SYSTEM = `You localize bakery product listings between English (en) and Indonesian (id).
 You are given a product name and description written in EITHER language. Detect the language and produce both the English and Indonesian versions.
 Rules:
-- Keep translations natural, concise, and appetizing — write like a real bakery menu, not a literal word-for-word translation.
+- Keep translations natural, concise, and appetizing, written like a real bakery menu, not a literal word-for-word translation.
 - Preserve meaning. Do not invent details, prices, or ingredients that are not present.
 - Keep product names short; translate them only when there is a natural equivalent, otherwise keep the original name.
 - If the description is empty, return empty strings for both description fields.`;
