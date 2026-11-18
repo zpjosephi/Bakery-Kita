@@ -30,6 +30,8 @@ const fraunces = Fraunces({
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getDict();
   return {
+    // og:image needs an absolute URL or LinkedIn and friends skip the preview
+    metadataBase: new URL("https://bakery-kita.vercel.app"),
     title: t.meta.homeTitle,
     description: t.meta.homeDescription,
   };
